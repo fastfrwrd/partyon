@@ -1,16 +1,21 @@
 {
     "name": "api",
     "private": true,
-    "version": "0.0.0",
-    "description": "a Sails application",
+    "version": "0.0.1",
+    "description": "partyon api",
     "dependencies": {
-        "sails": "0.8.82"
+        "sails": "*",
+        "hulk-hogan": "*"
     },
     "scripts": {
+        "preinstall": "sudo npm install -g sails",
         "start": "node app.js"
     },
     "main": "app.js",
-    "repository": "",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/fastfrwrd/partyon.git"
+    },
     "author": "",
     "license": "MIT"
 }
