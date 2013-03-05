@@ -55,10 +55,32 @@ article {
     margin-left: 70px;
 }
 
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+    border-color: #8E44AD;
+}
+
 
 .config {
     background-color: #8E44AD;
 }
+    .config .title {
+        background-color: #9B59B6;
+    }
     .config .list li {
         padding-top: 1em;
         padding-bottom: 1em;
