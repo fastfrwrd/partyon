@@ -7,12 +7,13 @@
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/flat-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 	<div class="container">
 		<div class="row">
 			<div class="span10 offset1">
-				<h3>Hello, world!</h3>
+				<h1>Party On!</h1>
 				<form class="form" action="//partyon/party/create">
 					<button class="btn btn-large btn-primary new-party">New Party!</button>
 					<div class="hide create-party">
@@ -20,6 +21,43 @@
 					</div>
 				</form>
 				<div class="party-zone"></div>
+				<article class="config">
+					<h3 class="title">Config</h3>
+					<ul class="list form-horizontal">
+						<li>
+							<div class="control-group">
+								<label class="control-label" for="inputPhone">Phone</label>
+								<div class="controls">
+									<input type="tel" class="input-medium phone" id="inputPhone"></input>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="control-group">
+								<label class="control-label" for="inputTitle">Title</label>
+								<div class="controls">
+									<input type="text" class="input-xxlarge" id="inputTitle"></input>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</article>
+				<article class="queue">
+					<h3 class="title">Queue</h3>
+					<ul class="list">
+						<li><span class="name">212</span><span class="etc">- Azealia Banks, Lazy Jay</span><span class="pull-right">8.1</span></li>
+						<li><span class="name">Soda</span><span class="etc">- Boody, Le1f</span><span class="pull-right">7.4</span></li>
+						<li><span class="name">Wavvy</span><span class="etc">- Mykki Blanco &amp; Brenman, Mykki Blanco, Brenmar</span><span class="pull-right">3.1</span></li>
+					</ul>
+				</article>
+				<article class="history">
+					<h3 class="title">Party History</h3>
+					<ul class="list">
+						<li><span class="name">Drum it up</span><span class="etc">- 11 songs</span><time class="pull-right">January 23, 2013</time></li>
+						<li><span class="name">Let's Have A Kiki</span><span class="etc">- 32 songs</span><time class="pull-right">April 16, 2012</time></li>
+						<li><span class="name">State Band Trip</span><span class="etc">- 9 songs</span><time class="pull-right">October 11, 2011</time></li>
+					</ul>
+				</article>
 			</div>
 		</div>
 	</div>
