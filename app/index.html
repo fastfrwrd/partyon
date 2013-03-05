@@ -1,7 +1,6 @@
 <html>
 <head>
 	<!-- Spotify CSS files -->
-    <link rel="stylesheet" type="text/css" href="sp://resources/css/eve.css">
     <link rel="stylesheet" type="text/css" href="sp://resources/css/api.css">
     <link rel="stylesheet" type="text/css" href="sp://resources/css/player.css">
     <link rel="stylesheet" type="text/css" href="sp://resources/css/list.css">
@@ -9,10 +8,23 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
-	<h3>Hello, world!</h3>
-	<button class="button large new-party">New Party!</button>
-	<div class="party-zone"></div>
+	<div class="container">
+		<div class="row">
+			<div class="span10 offset1">
+				<h3>Hello, world!</h3>
+				<form class="form" action="//partyon/party/create">
+					<button class="btn btn-large btn-primary new-party">New Party!</button>
+					<div class="hide create-party">
+						<input type="text" class="input-xlarge phone" name="phone" placeholder="Phone number" />
+					</div>
+				</form>
+				<div class="party-zone"></div>
+			</div>
+		</div>
+	</div>
+	<!-- Scripts -->
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.mask.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
