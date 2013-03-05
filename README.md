@@ -18,7 +18,7 @@ setup
 1. Get a nodeenv and run it: https://github.com/ekalinin/nodeenv
 2. Install sails on your env:
 
-		$(env) > npm install sails
+		$(env) > sudo npm -g install sails
 
 3. Run the app and hit it with http://localhost:1337
 	
