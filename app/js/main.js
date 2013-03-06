@@ -1,23 +1,28 @@
-jQuery(function($) {
-	// var init = function() {
-	// 	$('input.phone').mask('(999) 999-9999');
-	// 	$('.new-party').click(function(ev) {
-	// 		$('.new-party, .config').toggleClass('hide');
-	// 	});
-	// },
+var app = {
 
-	// party = {
-	// 	create : function() {},
-	// 	destroy : function() {}
-	// };
+	createParty: function(data) {
 
-	// $(function() {
-	// 	init();
-	// });
+    var party = new Mast.models.Party(data);
+    party.save({}, {
+      success: function(model) {
+		    app.party = new Mast.components.Party({ model: model });
+		    app.new.hide();
+      },
+      error: function() {
+        console.error('error  ', arguments);
+      }
+    })
 
+	}
 
-	window.app = new PartyOn($('.app'));
+};
 
+Mast.routes.index = function(query,page) {
+	app.new = new Mast.components.New();
+}
 
-
+Mast.raise({
+	baseurl: 'http://localhost:1337'
 });
+
+

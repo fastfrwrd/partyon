@@ -87,7 +87,7 @@ var PartyOn = BaseView.extend({
   },
 
   createParty: function(data) {
-    var p = new Party(data);
+    var p = new Mast.models.Party(data);
     this.queue.model = p;
     var $queue = this.queue.render().$el
     this.new.$el.after($queue);
