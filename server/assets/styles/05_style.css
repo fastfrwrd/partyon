@@ -3,15 +3,34 @@ article {
     margin-top: 5em;
 }
 
-h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+article h1 small,
+article h2 small,
+article h3 small,
+article h4 small,
+article h5 small,
+article h6 small {
     color: #ECF0F1;
     margin-left: 30px;
 }
 
-article p {
+article p, 
+article form {
     padding: 10px 22px;
     color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
+}
+
+.tt-dropdown-menu {
+    background: white;
+}
+
+.tt-is-under-cursor {
+    background: #8E44AD;
+    color: white !important;
+}
+
+.tt-is-under-cursor a {
+    color: white;
 }
 
 .title {
