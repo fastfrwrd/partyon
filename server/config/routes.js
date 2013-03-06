@@ -21,10 +21,14 @@
 //   - if no view OR model exists, Sails will respond with a 404.
 //
 module.exports.routes = {
-	
+
 	// To route the home page to the "index" action of the "home" controller:
 	'/' : {
 		controller	: 'home'
+	},
+	'/p/:uri' : {
+		controller	: 'party',
+		action : 'view'
 	}
 
 	// If you want to set up a route only for a particular HTTP method/verb 
