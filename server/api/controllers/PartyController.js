@@ -15,8 +15,25 @@ var PartyController = {
 			return uri;
 		};
 
-		req.params.uri = generateUri(req.param('name'), Party.findAll().length + 1);
+		Party.findAll().done(function(err, parties) {
+			if(err || !parties) parties = [];
+			req.params.uri = generateUri(req.param('name'), parties.length + 1);
+		});
 		next();
+	},
+
+	view: function(req,res,next) {
+		if(!req.param('uri')) next();
+		Party.findByUri(req.param('uri')).done(function(err, party) {
+			if(err) res.send("Sad.", 500);
+			if(!party) res.send("No parties dood.", 404);
+
+			User.findAllByPartyId(party.id).done(function(err,users) { party.users = users; });
+			Track.findAllByPartyId(party.id).done(function(err,tracks) { party.tracks = tracks; });
+
+			res.json(party);
+		});
+
 	}
 
 };
