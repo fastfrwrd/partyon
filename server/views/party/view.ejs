@@ -1,0 +1,15 @@
+<article class="queue" id="party_<%= party.id %>">
+	<h3 class="title"><%= party.name %><small><%= party.tracks.length %> tracks &bull; <%=: party.users.length %> guests</small></h3>
+	<% if (party.tracks.length) { %>
+	<ul class="list">
+		<% party.tracks.forEach(function(track) { %>
+		<li>
+			<span class="name"><a href="<%= track.trackUri %>"><%= track.title %></a></span>
+			<span class="etc">- <a href="<%= track.artistUri %>"><%= track.artist %></a></span>
+		</li>
+		<% }); %>
+	</ul>
+	<% } else { %>
+		<p>No tracks have been added to this party. <em>Get this party started!</em></p>
+	<% } %>
+</article>
