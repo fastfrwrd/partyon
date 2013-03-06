@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="css/flat-ui.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
-<body>
+<body class="app">
 	<div class="container">
 		<div class="row">
 			<div class="span10 offset1">
@@ -20,26 +20,25 @@
 				<article class="new">
 					<h3 class="title">New Party</h3>
 					<ul class="list form-horizontal">
-						<li>
-							<div class="control-group">
-								<label class="control-label" for="inputPhone">Phone</label>
-								<div class="controls">
-									<input type="tel" class="input-medium phone" id="inputPhone"></input>
-								</div>
+						<li class="control-group">
+							<label class="control-label" for="inputPhone">Phone</label>
+							<div class="controls">
+								<input type="tel" class="input-medium phone" id="inputPhone"></input>
 							</div>
 						</li>
-						<li>
-							<div class="control-group">
-								<label class="control-label" for="inputTitle">Title</label>
-								<div class="controls">
-									<input type="text" class="input-xxlarge" id="inputTitle"></input>
-								</div>
+						<li class="control-group">
+							<label class="control-label" for="inputTitle">Title</label>
+							<div class="controls">
+								<input type="text" class="input-xxlarge" id="inputTitle"></input>
 							</div>
+						</li>
+						<li class="form-actions">
+              <button type="submit" class="btn palette-amethyst" id="submitNew">Let's Party!&nbsp;<i class="icon icon-globe icon-white"></i></button>
 						</li>
 					</ul>
 				</article>
-				
-				<article class="queue">
+
+				<article class="queue hide">
 					<h3 class="title">Queue</h3>
 					<ul class="list">
 						<li><span class="name">212</span><span class="etc">- Azealia Banks, Lazy Jay</span><span class="pull-right">8.1</span></li>
@@ -63,6 +62,8 @@
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jquery.mask.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/json2_underscore_backbone.js"></script>
+	<script type="text/javascript" src="js/views.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
