@@ -7,6 +7,17 @@ article {
     margin-top: 5em;
 }
 
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+    color: #ECF0F1;
+    margin-left: 30px;
+}
+
+article p {
+    padding: 10px 22px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+}
+
 .title {
     border-radius: 6px 6px 0 0;
     padding: 1em;
