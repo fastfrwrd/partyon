@@ -1,3 +1,7 @@
+html {
+    text-shadow: none;
+}
+
 article {
     border-radius: 8px;
     margin-top: 5em;

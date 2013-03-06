@@ -43,21 +43,25 @@ var New = BaseView.extend({
   submitPressed: function(e) {
     e.preventDefault();
     var req = this.$form.doTheAjax()
-    req.always(function() {
-      console.log(arguments);
-    })
-  },
-
-  createParty: function() {
-
+    req
+      .done(_.bind(app.createParty, app))
+      .error(function(req, err) {
+        console.error(err)
+      });
   }
 
 });
 
 
 var Queue = BaseView.extend({
-  initialize: function($el) {
+
+  template: _.template('<article class="queue hide"><h3 class="title">Queue</h3><ul class="list"><li><span class="name">212</span><span class="etc">- Azealia Banks, Lazy Jay</span><span class="pull-right">8.1</span></li></ul></article>'),
+
+  render: function() {
+    console.log(this.model.toJSON());
+    var $el = $(this.template(this.model.toJSON()));
     this.setElement($el);
+    return this;
   }
 });
 
@@ -75,11 +79,20 @@ var PartyOn = BaseView.extend({
   initialize: function($el) {
 
     this.new = new New($el.find('.new'));
-    this.queue = new Queue($el.find('.queue'));
+    this.queue = new Queue();
     this.history = new History($el.find('.history'));
 
     this.new.show()
 
+  },
+
+  createParty: function(data) {
+    var p = new Party(data);
+    this.queue.model = p;
+    var $queue = this.queue.render().$el
+    this.new.$el.after($queue);
+    app.queue.show();
+    this.new.hide();
   }
 
 });
