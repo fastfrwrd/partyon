@@ -19,23 +19,25 @@
 
 				<article class="new">
 					<h3 class="title">New Party</h3>
-					<ul class="list form-horizontal">
-						<li class="control-group">
-							<label class="control-label" for="inputPhone">Phone</label>
-							<div class="controls">
-								<input type="tel" class="input-medium phone" id="inputPhone"></input>
-							</div>
-						</li>
-						<li class="control-group">
-							<label class="control-label" for="inputTitle">Title</label>
-							<div class="controls">
-								<input type="text" class="input-xxlarge" id="inputTitle"></input>
-							</div>
-						</li>
-						<li class="form-actions">
-              <button type="submit" class="btn palette-amethyst" id="submitNew">Let's Party!&nbsp;<i class="icon icon-globe icon-white"></i></button>
-						</li>
-					</ul>
+					<form method="post" action="http://localhost:1337/party/create">
+						<ul class="list form-horizontal">
+							<li class="control-group">
+								<label class="control-label" for="inputPhone">Phone</label>
+								<div class="controls">
+									<input type="tel" name="phone" class="input-medium phone" id="inputPhone"></input>
+								</div>
+							</li>
+							<li class="control-group">
+								<label class="control-label" for="inputTitle">Title</label>
+								<div class="controls">
+									<input type="text" name="name" class="input-xxlarge" id="inputTitle"></input>
+								</div>
+							</li>
+							<li class="form-actions">
+	              <button type="submit" class="btn palette-amethyst" id="submitNew">Let's Party!&nbsp;<i class="icon icon-globe icon-white"></i></button>
+							</li>
+						</ul>
+					</form>
 				</article>
 
 				<article class="queue hide">
@@ -63,6 +65,7 @@
 	<script type="text/javascript" src="js/jquery.mask.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 	<script type="text/javascript" src="js/json2_underscore_backbone.js"></script>
+	<script type="text/javascript" src="js/util.js"></script>
 	<script type="text/javascript" src="js/views.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>

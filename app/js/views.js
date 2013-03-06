@@ -12,7 +12,7 @@ var New = BaseView.extend({
 
   events: {
     'change input': 'inputChanged',
-    'click #submitNew': 'submitPressed'
+    'submit form': 'formSubmitted'
   },
 
   initialize: function($el) {
@@ -21,7 +21,7 @@ var New = BaseView.extend({
     this.$phone = $el.find('#inputPhone');
     this.$title = $el.find('#inputTitle');
     this.$actions = $el.find('.form-actions');
-    this.$submit = this.$actions.find('#submitNew');
+    this.$form = $el.find('form');
 
     this.$phone.mask('(999) 999-9999');
   },
@@ -38,13 +38,24 @@ var New = BaseView.extend({
     this.$actions.addClass('show');
   },
 
-  submitPressed: function(e) {
-    e.preventDefault();
-    console.log('do something');
-  },
-
   validate: function() {
     return this.$phone.val() != '' && this.$title.val() != '';
+  },
+
+  formSubmitted: function(e) {
+    e.preventDefault();
+    var data = this.$form.serializeObject();
+    this.createParty(data);
+  },
+
+  createParty: function(data) {
+    $.ajax({
+      url: this.$form.attr('action'),
+      type: this.$form.attr('method'),
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify(data)
+    });
   }
 
 });
