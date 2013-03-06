@@ -3,17 +3,10 @@
 	-> model
 ---------------------*/
 module.exports = {
-	
+
 	attributes	: {
+		uri: "STRING",
 
-		// Simple attribute:
-		// name: 'STRING',
-
-		// Or for more flexibility:
-		// phoneNumber: {
-		//	type: 'STRING',
-		//	defaultValue: '555-555-5555'
-		// }
 	}
 
 };

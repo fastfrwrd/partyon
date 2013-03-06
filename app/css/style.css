@@ -75,17 +75,17 @@ input[type="color"]:focus,
 }
 
 
-.config {
+.new {
     background-color: #8E44AD;
 }
-    .config .title {
+    .new .title {
         background-color: #9B59B6;
     }
-    .config .list li {
+    .new .list li {
         padding-top: 1em;
         padding-bottom: 1em;
     }
-    .config input {
+    .new input {
         height: 40px;
         margin-bottom: 0;
     }

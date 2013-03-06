@@ -3,17 +3,15 @@
 	-> model
 ---------------------*/
 module.exports = {
-	
+
 	attributes	: {
+		trackUri: 'STRING',
+		artistUri: 'STRING',
+		albumUri: 'STRING',
 
-		// Simple attribute:
-		// name: 'STRING',
-
-		// Or for more flexibility:
-		// phoneNumber: {
-		//	type: 'STRING',
-		//	defaultValue: '555-555-5555'
-		// }
+		title: 'STRING',
+		artist: 'STRING',
+		album: 'STRING'
 	}
 
 };

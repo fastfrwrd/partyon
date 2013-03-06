@@ -14,13 +14,7 @@
 			"title": {
 				"en": "Home"
 			}
-		},
-		{
-			"arguments": "tabs",
-			"title": {
-				"en": "Partys"
-			}
-        }
+		}
 	],
 	"Dependencies": {
 	  "api": "0.2.3",

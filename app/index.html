@@ -1,11 +1,13 @@
 <html>
 <head>
 	<!-- Spotify CSS files -->
+    <link rel="stylesheet" type="text/css" href="sp://resources/css/eve.css">
     <link rel="stylesheet" type="text/css" href="sp://resources/css/api.css">
     <link rel="stylesheet" type="text/css" href="sp://resources/css/player.css">
     <link rel="stylesheet" type="text/css" href="sp://resources/css/list.css">
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css">
     <link rel="stylesheet" type="text/css" href="css/flat-ui.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
@@ -14,15 +16,9 @@
 		<div class="row">
 			<div class="span10 offset1">
 				<h1>Party On!</h1>
-				<form class="form" action="//partyon/party/create">
-					<button class="btn btn-large btn-primary new-party">New Party!</button>
-					<div class="hide create-party">
-						<input type="text" class="input-xlarge phone" name="phone" placeholder="Phone number" />
-					</div>
-				</form>
-				<div class="party-zone"></div>
-				<article class="config">
-					<h3 class="title">Config</h3>
+
+				<article class="new">
+					<h3 class="title">New Party</h3>
 					<ul class="list form-horizontal">
 						<li>
 							<div class="control-group">
@@ -42,6 +38,7 @@
 						</li>
 					</ul>
 				</article>
+				
 				<article class="queue">
 					<h3 class="title">Queue</h3>
 					<ul class="list">
@@ -50,6 +47,7 @@
 						<li><span class="name">Wavvy</span><span class="etc">- Mykki Blanco &amp; Brenman, Mykki Blanco, Brenmar</span><span class="pull-right">3.1</span></li>
 					</ul>
 				</article>
+
 				<article class="history">
 					<h3 class="title">Party History</h3>
 					<ul class="list">
