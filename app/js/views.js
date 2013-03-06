@@ -12,7 +12,7 @@ var New = BaseView.extend({
 
   events: {
     'change input': 'inputChanged',
-    'submit form': 'formSubmitted'
+    'submit form': 'submitPressed'
   },
 
   initialize: function($el) {
@@ -25,8 +25,6 @@ var New = BaseView.extend({
 
     this.$phone.mask('(999) 999-9999');
   },
-
-  ready: false,
 
   inputChanged: function() {
 
@@ -42,20 +40,16 @@ var New = BaseView.extend({
     return this.$phone.val() != '' && this.$title.val() != '';
   },
 
-  formSubmitted: function(e) {
+  submitPressed: function(e) {
     e.preventDefault();
-    var data = this.$form.serializeObject();
-    this.createParty(data);
+    var req = this.$form.doTheAjax()
+    req.always(function() {
+      console.log(arguments);
+    })
   },
 
-  createParty: function(data) {
-    $.ajax({
-      url: this.$form.attr('action'),
-      type: this.$form.attr('method'),
-      dataType: 'json',
-      contentType: 'application/json; charset=utf-8',
-      data: JSON.stringify(data)
-    });
+  createParty: function() {
+
   }
 
 });
