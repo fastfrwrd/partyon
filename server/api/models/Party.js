@@ -4,9 +4,9 @@
 ---------------------*/
 module.exports = {
 
-	attributes	: {
+	attributes: {
 		uri: "STRING",
-
+		name: "STRING"
 	}
 
 };

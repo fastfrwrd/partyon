@@ -6,7 +6,8 @@ module.exports = {
 
 	attributes	: {
 		picUri: 'STRING',
-		phoneNumber: 'STRING'
+		phoneNumber: 'STRING',
+		partyId: "INTEGER"
 	}
 
 };

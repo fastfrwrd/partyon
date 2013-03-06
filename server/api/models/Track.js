@@ -11,7 +11,8 @@ module.exports = {
 
 		title: 'STRING',
 		artist: 'STRING',
-		album: 'STRING'
+		album: 'STRING',
+		partyId: "INTEGER"
 	}
 
 };
