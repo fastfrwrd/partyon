@@ -6,7 +6,7 @@
 module.exports.policies = {
 
 	// Default policy (allow public access)
-	'*': true
+	'*': 'allowCrossDomain'
 
 	/** Example mapping: 
 	someController: {

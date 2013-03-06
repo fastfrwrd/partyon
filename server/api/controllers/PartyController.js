@@ -25,8 +25,8 @@ var PartyController = {
 	view: function(req,res,next) {
 		if(!req.param('uri')) next();
 		Party.findByUri(req.param('uri')).done(function(err, party) {
-			if(err) res.send("Sad.", 500);
-			if(!party) res.send("No parties dood.", 404);
+			if(err) return res.view('500');
+			if(!party) return res.view('404');
 
 			User.findAllByPartyId(party.id).done(function(err,users) { party.users = users; });
 			Track.findAllByPartyId(party.id).done(function(err,tracks) { party.tracks = tracks; });
