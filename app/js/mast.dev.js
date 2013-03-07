@@ -1265,8 +1265,6 @@
 
   Transport.prototype.onData = function (data) {
 
-    console.log('DATA: ',data);
-
     this.clearCloseTimeout();
     
     // If the connection in currently open (or in a reopening state) reset the close 
@@ -6159,7 +6157,6 @@ Mast.mixins = {
                     newEntity.prototype.events = _.objMap(newEntity.prototype.events,Mast.mixins.interpretShorthand);
                     // newEntity.prototype.bindings = _.objMap(newEntity.prototype.bindings,Mast.mixins.interpretShorthand);
                     newEntity.prototype.subscriptions = _.objMap(newEntity.prototype.subscriptions,Mast.mixins.interpretShorthand);
-                    console.log(newEntity.prototype.subscriptions);
 
                     Mast._registerQueue.splice(i, 1);
                 } else {
@@ -6491,7 +6488,6 @@ Mast.Socket =_.extend(
 
         // Route server-sent comet events
         Mast.Socket._socket.on('message',function(cometMessage) {
-          console.log("cometMessage", cometMessage);
             if (cometMessage.uri) {
                 Mast.Socket.route(cometMessage.uri,_.clone(cometMessage.data));
             }
@@ -6534,7 +6530,6 @@ Mast.Socket =_.extend(
     
     // Subscribe a client-side handler action to a server-sent event
     subscribe: function (routeUri,action,context) {
-      console.log(routeUri, action, context);
         if (!Mast.Socket.routes[routeUri]) {
             Mast.Socket.routes[routeUri] = [];
         }
@@ -7180,7 +7175,6 @@ Mast.Component = {
                 var action = self.subscriptions[route];
                 action =  _.isFunction(action) ? action : self[action];
                 action = _.bind(action,self);
-                console.log(route, action);
                 Mast.Socket.subscribe(route, _.isFunction(action) ? action : this[action], this);
             }, this);
         }
@@ -7191,7 +7185,6 @@ Mast.Component = {
 
     // Look for matching route subscription and trigger it
     triggerRouteSubscription: function ( pattern ) {
-      console.log('trace',pattern);
         var self = this;
         _.each(this.getSubscriptionSubset("#"), function (route) {
 
@@ -7653,7 +7646,6 @@ Mast.Tree = {
             };
             this.subscriptions = _.defaults(this.subscriptions || {},defaultSubscriptions);
         }
-        console.log(this.subscriptions);
                 
         // Initialize main component
         Mast.Component.prototype.initialize.call(this,attributes,options);
