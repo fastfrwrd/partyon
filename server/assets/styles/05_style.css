@@ -59,6 +59,13 @@ article form {
         .list time {
             float: right;
         }
+        .list .user {
+            padding-right: 5px;
+        }
+            .list .user img {
+                width: 44px;
+                height: 44px;
+            }
 
 
 .form-horizontal .control-group {
