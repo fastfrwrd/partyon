@@ -54,8 +54,10 @@ $(function() {
 		},
 
 		upload : function(ev) {
-	    	this.$('.preview video').removeAttr('src');
-			console.log(ev);
+			var img = $('.view canvas').get(0).toDataURL();
+			$.post('/user/uploadPhoto', {data:img}, function(data, status) {
+				console.log(status, data);
+			});
 		},
 
 		render : function() {
