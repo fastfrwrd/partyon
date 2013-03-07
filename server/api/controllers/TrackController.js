@@ -17,7 +17,10 @@ var TrackController = {
 					if(err) return res.json(err, 500);
 					else return res.json(track, 200);
 				});
-			} else return next();
+			} else {
+				req.params.userId = req.session.user.id;
+				next();
+			}
 		});
 	}
 

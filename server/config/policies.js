@@ -6,7 +6,11 @@
 module.exports.policies = {
 
 	// Default policy (allow public access)
-	'*': true
+	'*': true,
+
+	'party' : {
+		'view' : 'authenticated'
+	}
 
 	/** Example mapping:
 	someController: {

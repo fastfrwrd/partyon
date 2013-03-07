@@ -10,6 +10,10 @@ article form {
     font-size: 14px;
 }
 
+.button-row {
+    margin-top: 10px;
+}
+
 .title {
     border-radius: 6px 6px 0 0;
     padding: 1em;
