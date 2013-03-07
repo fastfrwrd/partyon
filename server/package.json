@@ -4,7 +4,8 @@
     "version": "0.0.1",
     "description": "partyon api",
     "dependencies": {
-        "hulk-hogan": "*"
+        "hulk-hogan": "*",
+        "underscore": "1.4.4"
     },
     "scripts": {
         "preinstall": "sudo npm install -g sails",

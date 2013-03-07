@@ -24,11 +24,25 @@ module.exports.routes = {
 
 	// To route the home page to the "index" action of the "home" controller:
 	'/' : {
-		controller	: 'home'
+		controller : 'home'
 	},
 	'/p/:uri' : {
-		controller	: 'party',
+		controller : 'party',
 		action : 'view'
+	},
+
+	/* photos */
+	'post /user/uploadPhoto' : {
+		controller : 'user',
+		action : 'uploadPhoto'
+	},
+	'get /user/:id/img' : {
+		controller : 'user',
+		action : 'getPhoto'
+	},
+	'post /user/switchParty' : {
+		controller : 'user',
+		action : 'switchParty'
 	}
 
 	// If you want to set up a route only for a particular HTTP method/verb 

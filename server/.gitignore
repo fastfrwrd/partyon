@@ -35,3 +35,8 @@ npm-debug.log
 .netbeans
 nbproject
 .idea
+
+#######################
+# PartyOn
+#######################
+assets/img/upload/*

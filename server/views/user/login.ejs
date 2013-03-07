@@ -1,0 +1,101 @@
+<div class="container">
+
+	<article id="login_<%= party.id %>" class="new" style="margin-top:2em;" data-partyon-partyid="<%= party.id %>">
+		<h3 class="title">Party On! <small class="details">a hack by Paul Marbach and Tucker Bickler</small></h3>
+		<div class="row">
+			<div class="offset3 span6">
+				<% if(user) { %>
+					<div class="well">
+						<h5>You're currently logged into a different party.</h5>
+						<h3>Want to switch to <strong><%= party.name %></strong>?</h3>
+						<div class="button-row" style="margin-bottom: 20px">
+							<button class="pull-right btn btn-large btn-primary go">Go to party</button>
+							<button class="pull-left btn btn-large back">Back</button>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				<% } else { %>
+					<div id="snapshot"></div>
+				<% } %>
+		</div>
+		</div>
+	</article>
+</div>
+
+<script type="text/javascript">
+
+$(function() {
+	<% if(user) { %>
+	$('.go').click(function(ev) {
+		ev.preventDefault();
+		$.post('/user/switchParty/', {id:$('.new').attr('data-partyon-partyid')}, function(data) {
+			window.location.reload();
+		});
+	});
+
+	$('.back').click(function(ev) {
+		ev.preventDefault();
+		window.location = '/party/<%= user.partyId %>/view';
+	});
+
+	<% } else { %>
+	var Snapshot = Backbone.View.extend({
+		el : $('#snapshot'),
+		template : Templates.snapshot,
+		events : {
+			'click .take' : 'take',
+			'click .upload' : 'upload',
+			'click .retake' : 'setup'
+		},
+
+		initialize : function(options) {
+			this.setup();
+			this.render();
+		},
+
+		take : function(ev) {
+			var video = this.$('.preview video').get(0),
+	    		canvas = this.$('.view canvas').get(0),
+	    		ctx = canvas.getContext('2d');
+
+	    	ctx.drawImage(video, 0, 0, 640, 480);
+
+	    	this.$('.preview').hide();
+	    	this.$('.view').show();
+		},
+
+		setup : function(ev) {
+
+			if(navigator.webkitGetUserMedia && !this.$('.preview video').attr('src')) { 
+				navigator.webkitGetUserMedia({ video:true }, 
+					function(stream) { 
+						this.$('.preview .take').show();
+						this.$('.preview video').attr('src', window.webkitURL.createObjectURL(stream)); 
+					}, 
+					function(e) { console.log("error"); } 
+				);
+			}
+
+	    	this.$('.preview').show();
+	    	this.$('.view').hide();
+		},
+
+		upload : function(ev) {
+			var img = $('.view canvas').get(0).toDataURL(),
+				partyId = $('.new').attr('data-partyon-partyid');
+				
+			$.post('/user/uploadPhoto', {data:img, partyId:partyId}, function(data, status) {
+				window.location.reload();
+			});
+		},
+
+		render : function() {
+			this.$el.append(this.template.render());
+			return this;
+		}
+	});
+
+	var snapshot = new Snapshot()
+	<% } %>
+});
+</script>
