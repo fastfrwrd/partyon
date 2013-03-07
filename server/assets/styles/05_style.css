@@ -3,34 +3,11 @@ article {
     margin-top: 5em;
 }
 
-article h1 small,
-article h2 small,
-article h3 small,
-article h4 small,
-article h5 small,
-article h6 small {
-    color: #ECF0F1;
-    margin-left: 30px;
-}
-
 article p, 
 article form {
     padding: 10px 22px;
     color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
-}
-
-.tt-dropdown-menu {
-    background: white;
-}
-
-.tt-is-under-cursor {
-    background: #8E44AD;
-    color: white !important;
-}
-
-.tt-is-under-cursor a {
-    color: white;
 }
 
 .title {
@@ -39,6 +16,12 @@ article form {
     margin-bottom: 0;
     color: white;
 }
+
+    .title small {
+        color: #ECF0F1;
+        margin-left: 30px;
+    }
+
 .list {
     list-style: none;
     padding: 0;
@@ -143,6 +126,11 @@ input[type="color"]:focus,
         background-color: #E74C3C;
     }
 
+    .queue .search {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
 .history {
     background-color: #16A085;
 }
@@ -152,3 +140,25 @@ input[type="color"]:focus,
     .history li {
         background-color: #ECF0F1;
     }
+
+.ui-autocomplete li.ui-menu-item {
+    margin-bottom: 5px;
+}
+
+.ui-autocomplete li.ui-menu-item .name {
+    margin: 0;
+    line-height: 14px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.snapshot video, .snapshot canvas {
+    width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+    .title .details {
+        display: block;
+        margin-left: 0;
+    }
+}

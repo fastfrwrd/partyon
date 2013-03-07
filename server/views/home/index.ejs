@@ -1,9 +1,69 @@
 <div class="container">
-	<div class="row">
-		<div class="well span8 offset2">
-			<h1>Party On!</h1>
-			<h5>a youngins hack</h5>
-			<p>To use this, you'll need to join a party. Create a party from Spotify and use the link from there to get it going!</p>
+	<article class="new" style="margin-top:2em;">
+		<h3 class="title">Party On! <small class="details">a hack by Paul Marbach and Tucker Bickler</small></h3>
+		<p>To sign in, we're gonna take a screenshot of you. <em>No joke!</em></p>
+		<div class="row">
+			<div class="offset3 span6">
+				<div id="snapshot"></div>
+			</div>
 		</div>
-	</div>
+	</article>
 </div>
+
+<script type="text/javascript">
+$(function() {
+	var Snapshot = Backbone.View.extend({
+		el : $('#snapshot'),
+		template : Templates.snapshot,
+		events : {
+			'click .take' : 'take',
+			'click .upload' : 'upload',
+			'click .retake' : 'setup'
+		},
+
+		initialize : function(options) {
+			this.setup();
+			this.render();
+		},
+
+		take : function(ev) {
+			var video = this.$('.preview video').get(0),
+	    		canvas = this.$('.view canvas').get(0),
+	    		ctx = canvas.getContext('2d');
+
+	    	ctx.drawImage(video, 0, 0, 640, 480);
+
+	    	this.$('.preview').hide();
+	    	this.$('.view').show();
+		},
+
+		setup : function(ev) {
+
+			if(navigator.webkitGetUserMedia && !this.$('.preview video').attr('src')) { 
+				navigator.webkitGetUserMedia({ video:true }, 
+					function(stream) { 
+						this.$('.preview .take').show();
+						this.$('.preview video').attr('src', window.webkitURL.createObjectURL(stream)); 
+					}, 
+					function(e) { console.log("error"); } 
+				);
+			}
+
+	    	this.$('.preview').show();
+	    	this.$('.view').hide();
+		},
+
+		upload : function(ev) {
+	    	this.$('.preview video').removeAttr('src');
+			console.log(ev);
+		},
+
+		render : function() {
+			this.$el.append(this.template.render());
+			return this;
+		}
+	});
+
+	var snapshot = new Snapshot()
+});
+</script>

@@ -1,8 +1,11 @@
 <article class="queue" id="party_<%= party.id %>" data-partyon-partyid="<%= party.id %>">
-	<h3 class="title"><%= party.name %><small><%= party.tracks.length %> tracks &bull; <%=: party.users.length %> guests</small></h3>
-	<form class="form-search">
-		<input type="text" class="sp-search">
+	<h3 class="title"><%= party.name %>
+		<small class="details"><%= party.tracks.length %> tracks &bull; <%=: party.users.length %> guests</small>
+	</h3>
+	<form class="search">
+		<input type="text" class="sp-search input-xlarge">
 	</form>
+
 	<% if (party.tracks.length) { %>
 	<ul class="list">
 		<% party.tracks.forEach(function(track) { %>
@@ -17,3 +20,44 @@
 		<p>No tracks have been added to this party. <em>Get this party started!</em></p>
 	<% } %>
 </article>
+
+<script type="text/javascript">
+(function() {
+	$(function() {
+		// autocomplete setup
+		$('.sp-search').autocomplete({
+			source: function(req, res) {
+				$.getJSON("http://ws.spotify.com/search/1/track.json?q=" + req.term, function(data) {
+					res(_.map(_.first(data.tracks, 5), function(track) {
+						if(track.artists.length > 0) track.artists[0].first = true;
+
+						return track;
+					}));
+				});
+			},
+			select: function(ev, ui) {
+				console.log(ev);
+				var track = new Mast.models.Track({
+					trackUri : ui.item.href,
+					title : ui.item.name,
+					artist : _.pluck(ui.item.artists, 'name').join(', '),
+					partyId : $(ev.target).closest('article').attr('data-partyon-partyid'),
+					votes : 1
+				});
+				track.save({}, {
+					success:function(model) {
+						console.log(model);
+					},
+					error: function() {
+						console.error('error  ', arguments);
+					}
+				});
+			}
+		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li>" )
+				.append( Templates.spotifyItem.render(item) )
+				.appendTo( ul );
+		};
+	});
+})();
+</script>
