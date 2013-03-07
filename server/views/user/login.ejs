@@ -1,17 +1,44 @@
 <div class="container">
+
 	<article id="login_<%= party.id %>" class="new" style="margin-top:2em;" data-partyon-partyid="<%= party.id %>">
 		<h3 class="title">Party On! <small class="details">a hack by Paul Marbach and Tucker Bickler</small></h3>
-		<p>To sign in, we're gonna take a screenshot of you. <em>No joke!</em></p>
 		<div class="row">
 			<div class="offset3 span6">
-				<div id="snapshot"></div>
-			</div>
+				<% if(user) { %>
+					<div class="well">
+						<h5>You're currently logged into a different party.</h5>
+						<h3>Want to switch to <strong><%= party.name %></strong>?</h3>
+						<div class="button-row" style="margin-bottom: 20px">
+							<button class="pull-right btn btn-large btn-primary go">Go to party</button>
+							<button class="pull-left btn btn-large back">Back</button>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				<% } else { %>
+					<div id="snapshot"></div>
+				<% } %>
+		</div>
 		</div>
 	</article>
 </div>
 
 <script type="text/javascript">
+
 $(function() {
+	<% if(user) { %>
+	$('.go').click(function(ev) {
+		ev.preventDefault();
+		$.post('/user/switchParty/', {id:$('.new').attr('data-partyon-partyid')}, function(data) {
+			window.location.reload();
+		});
+	});
+
+	$('.back').click(function(ev) {
+		ev.preventDefault();
+		window.location = '/party/<%= user.partyId %>/view';
+	});
+
+	<% } else { %>
 	var Snapshot = Backbone.View.extend({
 		el : $('#snapshot'),
 		template : Templates.snapshot,
@@ -69,5 +96,6 @@ $(function() {
 	});
 
 	var snapshot = new Snapshot()
+	<% } %>
 });
 </script>

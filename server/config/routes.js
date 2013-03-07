@@ -30,6 +30,8 @@ module.exports.routes = {
 		controller : 'party',
 		action : 'view'
 	},
+
+	/* photos */
 	'post /user/uploadPhoto' : {
 		controller : 'user',
 		action : 'uploadPhoto'
@@ -37,6 +39,10 @@ module.exports.routes = {
 	'get /user/:id/img' : {
 		controller : 'user',
 		action : 'getPhoto'
+	},
+	'post /user/switchParty' : {
+		controller : 'user',
+		action : 'switchParty'
 	}
 
 	// If you want to set up a route only for a particular HTTP method/verb 

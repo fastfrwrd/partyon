@@ -3,6 +3,7 @@ var Templates = {
 		'<div class="snapshot">' +
 			'<div class="well">' +
 				'<div class="preview">' +
+					'<h5>To sign in, we\'re gonna take a screenshot of you. <em>No joke!</em></h5>' +
 					'<video autoplay width="640"></video>' +
 					'<div class="button-row">' +
 						'<button class="take btn btn-large btn-block hide">Oh snap!</button>' +
