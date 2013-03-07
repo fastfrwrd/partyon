@@ -10,6 +10,7 @@
 	<ul class="list">
 		<% party.tracks.forEach(function(track) { %>
 		<li>
+			<% if(track.userId) { %><span class="user"><img src="/user/<%= track.userId %>/img" /></span><% } %>
 			<span class="name"><a href="<%= track.trackUri %>"><%= track.title %></a></span>
 			<span class="etc"><small>by</small> <%= track.artist %></span>
 			<span class="pull-right"><%= track.votes %> <small>vote<% if(track.votes != 1) { %>s<% } %></small></span>
