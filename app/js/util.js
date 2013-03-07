@@ -1,14 +1,3 @@
-$.fn.doTheAjax = function() {
-  console.log(this.attr('action'), this.attr('method'), this.serializeObject());
-  return $.ajax({
-    url: this.attr('action'),
-    type: this.attr('method'),
-    dataType: 'json',
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(this.serializeObject())
-  });
-};
-
 $.fn.serializeObject = function()
 {
    var o = {};
