@@ -10,7 +10,8 @@ var Templates = {
 					'</div>' +
 				'</div>' +
 				'<div class="view hide">' +
-					'<canvas width="640" height="480"></canvas>' +
+					'<h5>To save your image, crop it and click "Party On!"</h5>' +
+					'<div class="canvas-wrapper"><canvas width="640" height="480"></canvas></div>' +
 					'<div class="button-row">' +
 						'<button class="upload btn btn-large btn-primary pull-right">Party On!</button>' +
 						'<button class="retake btn btn-large pull-left">Retake</button>' +

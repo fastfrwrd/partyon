@@ -37,7 +37,6 @@
 				});
 			},
 			select: function(ev, ui) {
-				console.log(ev);
 				var track = new Mast.models.Track({
 					trackUri : ui.item.href,
 					title : ui.item.name,
@@ -47,10 +46,10 @@
 				});
 				track.save({}, {
 					success:function(model) {
-						console.log(model);
+						// update here!
 					},
 					error: function() {
-						console.error('error  ', arguments);
+						console.error('error adding track', arguments);
 					}
 				});
 			}

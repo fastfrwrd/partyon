@@ -54,18 +54,55 @@ $(function() {
 		},
 
 		take : function(ev) {
-			var video = this.$('.preview video').get(0),
-	    		canvas = this.$('.view canvas').get(0),
-	    		ctx = canvas.getContext('2d');
+			var self = this;
+			var $video = this.$('.preview video'),
+	    		$canvas = this.$('.view canvas'),
+	    		ctx = $canvas.get(0).getContext('2d');
 
-	    	ctx.drawImage(video, 0, 0, 640, 480);
+	    	$canvas.attr({
+	    		'height': $video.height(),
+	    		'width': $video.width()
+	    	});
+	    	ctx.drawImage($video.get(0), 0, 0, $video.width(), $video.height());
+	    	var shorterSide = _.min([$video.width(), $video.height()]);
+
+	    	this.crop = ($video.width() === shorterSide)
+				? { 
+					x: 0, 
+					y: ($video.height() - shorterSide) / 2, 
+					x2: $video.width(), 
+					y2: ($video.height() + shorterSide) / 2, 
+					w: shorterSide, 
+					h: shorterSide 
+				}
+				: {
+					x: ($video.width() - shorterSide) / 2,
+					y: 0,
+					x2: ($video.width() + shorterSide) / 2,
+					y2: $video.height(),
+					w: shorterSide,
+					h: shorterSide
+				};
 
 	    	this.$('.preview').hide();
 	    	this.$('.view').show();
+	   		
+	   		$canvas.parent().css({
+	   			'height' : $canvas.height(),
+	   			'width' : $canvas.width()
+	   		}).Jcrop({
+	   			allowResize: false,
+	   			allowMove: true,
+	   			aspectRatio: 1,
+	   			setSelect: [this.crop.x,this.crop.y,this.crop.x2,this.crop.y2],
+	   			bgColor: 'transparent',
+	   			onSelect: function(crop) {
+	   				self.crop = crop;
+	   			}
+	   		});
 		},
 
 		setup : function(ev) {
-
 			if(navigator.webkitGetUserMedia && !this.$('.preview video').attr('src')) { 
 				navigator.webkitGetUserMedia({ video:true }, 
 					function(stream) { 
@@ -81,10 +118,18 @@ $(function() {
 		},
 
 		upload : function(ev) {
-			var img = $('.view canvas').get(0).toDataURL(),
+			var $canvas = this.$('.view canvas'),
+				$tempCanvas = $('<canvas />')
+					.attr({
+						'width' : this.crop.w,
+						'height' : this.crop.h
+					}),
+				ctx = $tempCanvas.get(0).getContext('2d'),
 				partyId = $('.new').attr('data-partyon-partyid');
-				
-			$.post('/user/uploadPhoto', {data:img, partyId:partyId}, function(data, status) {
+
+			ctx.drawImage($canvas.get(0), this.crop.x, this.crop.y, this.crop.w, this.crop.h, 0, 0, this.crop.w, this.crop.h);
+			
+			$.post('/user/uploadPhoto', {data:$tempCanvas.get(0).toDataURL(), partyId:partyId}, function(data, status) {
 				window.location.reload();
 			});
 		},
@@ -95,7 +140,7 @@ $(function() {
 		}
 	});
 
-	var snapshot = new Snapshot()
+	var snapshot = new Snapshot();
 	<% } %>
 });
 </script>

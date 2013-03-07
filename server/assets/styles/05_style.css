@@ -163,7 +163,7 @@ input[type="color"]:focus,
     font-weight: bold;
 }
 
-.snapshot video, .snapshot canvas {
+.snapshot video, .snapshot .canvas-wrapper {
     width: 100%;
 }
 
