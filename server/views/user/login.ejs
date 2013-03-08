@@ -1,6 +1,6 @@
 <div class="container">
 
-	<article id="login_<%= party.id %>" class="new" style="margin-top:2em;" data-partyon-partyid="<%= party.id %>">
+	<article id="login_<%= party.id %>" class="new" style="margin-top:2em;" data-partyon-partyid="<%= party.id %>"<% if (user) { %> data-partyon-userid="<%= user.id %>" data-partyon-userpartyid="<%= user.partyId %>"<% } %>>
 		<h3 class="title">Party On! <small class="details">a hack by Paul Marbach and Tucker Bickler</small></h3>
 		<div class="row">
 			<div class="offset3 span6">
@@ -25,132 +25,143 @@
 <script type="text/javascript">
 
 $(function() {
-	<% if(user) { %>
-	$('.go').click(function(ev) {
-		ev.preventDefault();
-		$.post('/user/switchParty/', {id:$('.new').attr('data-partyon-partyid')}, function(data) {
+	Mast.registerModel('User');
+
+	var partyId = $('article.new').attr('data-partyon-partyid'),
+		userId = $('article.new').attr('data-partyon-userid'),
+		userPartyId = $('article.new').attr('data-partyon-userpartyid');
+
+	if(userId) {
+		$('.go').click(function(ev) {
+			ev.preventDefault();
+			Mast.models.User({id:userId}).set('partyId', partyId).save();
 			window.location.reload();
 		});
-	});
 
-	$('.back').click(function(ev) {
-		ev.preventDefault();
-		window.location = '/party/<%= user.partyId %>/view';
-	});
+		$('.back').click(function(ev) {
+			ev.preventDefault();
+			window.location = '/party/' + userPartyId + '/view';
+		});
+	} else {
+		Mast.registerComponent('snapshot', {
+			template : '.snapshot',
+			outlet: '#snapshot',
+			events : {
+				'click .take' : 'take',
+				'click .upload' : 'upload',
+				'click .retake' : 'setup'
+			},
 
-	<% } else { %>
-	var Snapshot = Backbone.View.extend({
-		template : Templates.snapshot,
-		events : {
-			'click .take' : 'take',
-			'click .upload' : 'upload',
-			'click .retake' : 'setup'
-		},
+			init : function() {
+				this.setup();
+			},
 
-		take : function(ev) {
-			var self = this;
-			var $video = this.$('.preview video'),
-	    		$canvas = this.$('.view canvas'),
-	    		ctx = $canvas.get(0).getContext('2d');
+			take : function(ev) {
+				var self = this;
+				var $video = this.$('.preview video'),
+		    		$canvas = this.$('.view canvas'),
+		    		ctx = $canvas.get(0).getContext('2d');
 
-	    	$canvas.attr({
-	    		'height': $video.height(),
-	    		'width': $video.width()
-	    	});
+		    	$canvas.attr({
+		    		'height': $video.height(),
+		    		'width': $video.width()
+		    	});
 
-	    	ctx.drawImage($video.get(0), 0, 0, $video.width(), $video.height());
-	    	var shorterSide = _.min([$video.width(), $video.height()]);
+		    	ctx.drawImage($video.get(0), 0, 0, $video.width(), $video.height());
+		    	var shorterSide = _.min([$video.width(), $video.height()]);
 
-	    	this.crop = ($video.width() === shorterSide)
-				? { 
-					x: 0, 
-					y: ($video.height() - shorterSide) / 2, 
-					x2: $video.width(), 
-					y2: ($video.height() + shorterSide) / 2, 
-					w: shorterSide, 
-					h: shorterSide 
-				}
-				: {
-					x: ($video.width() - shorterSide) / 2,
-					y: 0,
-					x2: ($video.width() + shorterSide) / 2,
-					y2: $video.height(),
-					w: shorterSide,
-					h: shorterSide
-				};
-
-	    	this.$('.preview').hide();
-	    	this.$('.view').show();
-	   		
-	   		$canvas.parent().css({
-	   			'height' : $canvas.height(),
-	   			'width' : $canvas.width()
-	   		}).Jcrop({
-	   			allowResize: false,
-	   			allowMove: true,
-	   			aspectRatio: 1,
-	   			setSelect: [this.crop.x,this.crop.y,this.crop.x2,this.crop.y2],
-	   			bgColor: 'transparent',
-	   			onSelect: function(crop) {
-	   				self.crop = crop;
-	   			}
-	   		});
-		},
-
-		setup : function(ev) {
-			navigator.enabled = true;
-			navigator.getMedia = ( navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         //navigator.mozGetUserMedia ||
-                         navigator.msGetUserMedia);
-
-			if(navigator.getMedia) {
-				navigator.getMedia({
-					'video' : true
-				}, function(stream) {
-					var video = this.$('.preview video').get(0);
-					if (navigator.mozGetUserMedia) video.mozSrcObject = stream;
-					else {
-						var vendorURL = window.URL || window.webkitURL;
-						video.src = vendorURL.createObjectURL(stream);
+		    	this.crop = ($video.width() === shorterSide)
+					? { 
+						x: 0, 
+						y: ($video.height() - shorterSide) / 2, 
+						x2: $video.width(), 
+						y2: ($video.height() + shorterSide) / 2, 
+						w: shorterSide, 
+						h: shorterSide 
 					}
-					this.$('.preview').show();
-					video.play();
-				}, function(err) { console.log("error", err); });
-			} else {
-				// photo upload
-				this.$('.upload').show();
+					: {
+						x: ($video.width() - shorterSide) / 2,
+						y: 0,
+						x2: ($video.width() + shorterSide) / 2,
+						y2: $video.height(),
+						w: shorterSide,
+						h: shorterSide
+					};
+
+		    	this.$('.preview').hide();
+		    	this.$('.view').show();
+		   		
+		   		$canvas.parent().css({
+		   			'height' : $canvas.height(),
+		   			'width' : $canvas.width()
+		   		}).Jcrop({
+		   			allowResize: false,
+		   			allowMove: true,
+		   			aspectRatio: 1,
+		   			setSelect: [this.crop.x,this.crop.y,this.crop.x2,this.crop.y2],
+		   			bgColor: 'transparent',
+		   			onSelect: function(crop) {
+		   				self.crop = crop;
+		   			}
+		   		});
+			},
+
+			setup : function(ev) {
+				navigator.enabled = true;
+				navigator.getMedia = ( navigator.getUserMedia ||
+	                         navigator.webkitGetUserMedia ||
+	                         //navigator.mozGetUserMedia ||
+	                         navigator.msGetUserMedia);
+
+				if(navigator.getMedia) {
+					navigator.getMedia({
+						'video' : true
+					}, function(stream) {
+						var video = this.$('.preview video').get(0);
+						if (navigator.mozGetUserMedia) video.mozSrcObject = stream;
+						else {
+							var vendorURL = window.URL || window.webkitURL;
+							video.src = vendorURL.createObjectURL(stream);
+						}
+						this.$('.preview').show();
+						video.play();
+					}, function(err) { console.log("error", err); });
+				} else {
+					// photo upload
+					this.$('.upload').show();
+				}
+
+		    	this.$('.view').hide();
+			},
+
+			upload : function(ev) {
+				var $canvas = this.$('.view canvas'),
+					$tempCanvas = $('<canvas />')
+						.attr({
+							'width' : this.crop.w,
+							'height' : this.crop.h
+						}),
+					ctx = $tempCanvas.get(0).getContext('2d'),
+					partyId = $('.new').attr('data-partyon-partyid');
+
+				ctx.drawImage($canvas.get(0), this.crop.x, this.crop.y, this.crop.w, this.crop.h, 0, 0, this.crop.w, this.crop.h);
+				
+				$.post('/user/uploadPhoto', {data:$tempCanvas.get(0).toDataURL(), partyId:partyId}, function(data, status) {
+					window.location.reload();
+				});
 			}
+		});
+		
+		var app = {};
 
-	    	this.$('.view').hide();
-		},
-
-		upload : function(ev) {
-			var $canvas = this.$('.view canvas'),
-				$tempCanvas = $('<canvas />')
-					.attr({
-						'width' : this.crop.w,
-						'height' : this.crop.h
-					}),
-				ctx = $tempCanvas.get(0).getContext('2d'),
-				partyId = $('.new').attr('data-partyon-partyid');
-
-			ctx.drawImage($canvas.get(0), this.crop.x, this.crop.y, this.crop.w, this.crop.h, 0, 0, this.crop.w, this.crop.h);
-			
-			$.post('/user/uploadPhoto', {data:$tempCanvas.get(0).toDataURL(), partyId:partyId}, function(data, status) {
-				window.location.reload();
-			});
-		},
-
-		render : function() {
-			this.$el.append(this.template.render());
-			this.setup();
-			return this;
-		}
+		Mast.routes.index = function(query, page) {
+			app.snapshot = new Mast.components.snapshot();
+		}		
+	}
+	
+	Mast.raise({
+		sockets: false
 	});
 
-	var snapshot = new Snapshot();
-	snapshot.render();
-	<% } %>
 });
 </script>

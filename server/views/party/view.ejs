@@ -29,6 +29,7 @@
 	Mast.registerCollection('PartyTracks', {
 		url : '/track',
 		model : 'Track',
+		emptyHTML: "<li>No tracks yet for this party.</li>",
 		comparator: function(track) {
 			return -track.get('votes');
 		}
@@ -42,7 +43,7 @@
 	});
 
 	Mast.registerComponent('TrackListItem', {
-		template : '.track-item'
+		template : '.party-track',
 	});
 
 	Mast.routes.index = function(query,page) {
