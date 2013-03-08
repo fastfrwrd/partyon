@@ -8,40 +8,39 @@
 	<ul id="queue_list" class="list"></ul>
 </article>
 
-<div id="templates" class="hide"></div>
-
 <script type="text/javascript">
 (function() {
-	$('#templates').append($('<div />').attr('id','queue_item').html(Templates.queueItem));
-
-	Mast.registerComponent('TrackListItem', {
-		template : '#queue_item',
-		model : "Track",
-	  	outlet : '#queue_list',
-	  	subscriptions: {
-			'~track/create': function (id, data) {
-				console.log(id, data);
-				this.model.set(data);
-				this.render();
-			}
-		}
-	});
-
 	Mast.registerCollection('PartyTracks', {
 		url : '/party/' + $('.queue').attr('data-partyon-partyid') + '/tracks'
 	});
 
-	Mast.registerTree('PartyTracksList',{
-	    collection : 'PartyTracks',
-	    branchComponent : 'TrackListItem',
-	    init: function(){
+	Mast.registerComponent('TrackListItem', {
+		template : Templates.trackItem,
+		model : Mast.models.Track
+	});
+
+	Mast.registerTree("PartyTracksList", {
+	    collection : "PartyTracks",
+	    branchComponent : "TrackListItem",
+	    model : {
+	    	'uri' : null,
+	    	'title' : null,
+	    	'artist' : null,
+	    	'votes' : 0
+	    },
+	    outlet : '#queue_list',
+	   	template : '',
+	   	init: function(){
 	        this.collection.fetch();
+	       	this.render();
 	    }
 	});
 
-	Mast.raise({
-	    baseUrl: 'http://localhost:1337'
-	});
+	Mast.routes.index = function(query,page) {
+	    var tree = new Mast.components.PartyTracksList();
+	}
+
+	Mast.raise({ socket: false });
 
 	$(function() {
 		// autocomplete setup

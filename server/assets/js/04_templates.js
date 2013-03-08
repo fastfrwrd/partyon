@@ -1,4 +1,5 @@
 var Templates = {
+	// Hogan Templates
 	snapshot :
 		'<div class="snapshot">' +
 			'<div class="well" style="margin-top:20px">' +
@@ -33,15 +34,17 @@ var Templates = {
 		'<a href="#">' +
 			'<h5 class="name">{{ name }}</h5>' +
 			'<span class="artist">{{# artists }}{{^ first }}, {{/ first }}{{ name }}{{/ artists }}<span>' +
-		'</a>',
-
-	queueItem :
-		'<li>' +
-			'{{# user }}<span class="user"><img src="/user/{{ user.id }}/img" /></span>{{/ user }}' +
-			'<span class="name"><a href="{{ uri }}">{{ title }}</a></span>' +
-			'<span class="etc"><small>by</small> {{ artist }}</span>' +
-			'<span class="pull-right">{{ votes }} <small>votes</small></span>' +
-		'</li>'
+		'</a>'
 };
 
 _.each(Templates, function(t, key) { Templates[key] = Hogan.compile(t); });
+
+// Mast Templates
+_.extend(Templates, {
+	trackItem  : '<li>' +
+		'<span class="user"><img src="/user/{{ userId }}/img" /></span>' +
+		'<span class="name"><a href="{{ trackUri }}">{{ title }}</a></span>' +
+		'<span class="etc"><small>by</small> {{ artist }}</span>' +
+		'<span class="pull-right">{{ votes }} <small>votes</small></span>' +
+	'</li>'
+});

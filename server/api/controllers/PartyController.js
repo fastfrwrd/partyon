@@ -44,7 +44,7 @@ var PartyController = {
 		if(req.param('id')) {
 			Track.findAllByPartyId(req.param('id')).done(function(err,tracks) {
 				if(err) return res.json({"message" : "server error"}, 500);
-				return res.json(tracks, 200);
+				return res.json(_.map(tracks, function(t) { return _.omit(t, 'values'); }), 200);
 			});
 		} else return res.json([], 200);
 	}
