@@ -4,10 +4,14 @@ var app = {
 
     app.new.hide();
 
-    app.party = new Mast.components.Party();
-    app.party.set(data);
-    app.party.save();
-
+    var party = new Mast.models.Party(data);
+    party.save({}, {
+        success: function(model) {
+            app.party = new Mast.components.Party({
+                model: model
+            });
+        }
+    })
   }
 
 };
