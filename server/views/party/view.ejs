@@ -1,4 +1,4 @@
-<article class="queue" id="party_<%= party.id %>" data-partyon-partyid="<%= party.id %>">
+<article class="queue" id="party_<%= party.id %>" data-partyon-partyid="<%= party.id %>" data-partyon-userid="<%= user.id %>">
 	<h3 class="title"><%= party.name %>
 		<small class="details"><%= party.tracks.length %> tracks &bull; <%=: party.users.length %> guests</small>
 	</h3>
@@ -12,7 +12,8 @@
 (function() {
 
 	var app = {},
-		partyId = $("article.queue").attr('data-partyon-partyid');
+		partyId = $("article.queue").attr('data-partyon-partyid'),
+		userId = $("article.queue").attr('data-partyon-userid');
 
 	Mast.registerModel('Track', {
 		defaults: {
@@ -49,7 +50,7 @@
 	}
 
 	Mast.raise({
-		//baseurl: "http://localhost:1337"
+		baseurl: "http://localhost:1337"
 	});
 
 	$(function() {
@@ -70,6 +71,7 @@
 					title : ui.item.name,
 					artist : _.pluck(ui.item.artists, 'name').join(', '),
 					partyId : partyId,
+					userId: userId,
 					votes : 1
 				});
 			}

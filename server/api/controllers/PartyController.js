@@ -36,7 +36,7 @@ var PartyController = {
 			User.findAllByPartyId(party.id).done(function(err,users) { party.users = users; });
 			Track.findAllByPartyId(party.id).done(function(err,tracks) { party.tracks = tracks; });
 
-			res.view('party/view', { party : party });
+			res.view('party/view', { party : party, user : req.session.user });
 		});
 	}
 };
