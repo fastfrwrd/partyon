@@ -5,7 +5,7 @@
 	<form class="search">
 		<input type="text" class="sp-search input-xlarge">
 	</form>
-	<ul id="queue_list" class="list"></ul>
+	<ul id="queue-list" class="list"></ul>
 </article>
 
 <script type="text/javascript">
@@ -34,14 +34,14 @@
 	});
 
 	Mast.registerTree("PartyTracksList", {
-		outlet : '#queue_list',
-	   	template : Templates.trackItem,
+		outlet : '#queue-list',
+	   	template : '.queue-list',
 	    collection : "PartyTracks",
 	    branchComponent : "TrackListItem"
 	});
 
 	Mast.registerComponent('TrackListItem', {
-		template : Templates.trackItem
+		template : '.track-item'
 	});
 
 	Mast.routes.index = function(query,page) {
