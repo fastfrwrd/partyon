@@ -67,7 +67,7 @@
 				});
 			},
 			select: function(ev, ui) {
-				var model = app.tracks.collection.create({
+				var model = app.tracks.appendBranch({
 					trackUri : ui.item.href,
 					title : ui.item.name,
 					artist : _.pluck(ui.item.artists, 'name').join(', '),
