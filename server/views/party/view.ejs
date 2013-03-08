@@ -10,37 +10,43 @@
 
 <script type="text/javascript">
 (function() {
-	Mast.registerCollection('PartyTracks', {
-		url : '/party/' + $('.queue').attr('data-partyon-partyid') + '/tracks'
-	});
 
-	Mast.registerComponent('TrackListItem', {
-		template : Templates.trackItem,
-		model : Mast.models.Track
+	var partyId = $("article.queue").data('data-partyon-partyid'),
+		app = {};
+
+	Mast.registerModel('Track', {
+		defaults: {
+			title: "",
+			userId: 0,
+			trackUri: "",
+			artists: "",
+			votes: 0
+		}
+	})
+
+	Mast.registerCollection('PartyTracks', {
+		url : '/track',
+		model : 'Track'
 	});
 
 	Mast.registerTree("PartyTracksList", {
+		outlet : '#queue_list',
+	   	template : Templates.trackItem,
 	    collection : "PartyTracks",
-	    branchComponent : "TrackListItem",
-	    model : {
-	    	'uri' : null,
-	    	'title' : null,
-	    	'artist' : null,
-	    	'votes' : 0
-	    },
-	    outlet : '#queue_list',
-	   	template : '',
-	   	init: function(){
-	        this.collection.fetch();
-	       	this.render();
-	    }
+	    branchComponent : "TrackListItem"
+	});
+
+	Mast.registerComponent('TrackListItem', {
+		template : Templates.trackItem
 	});
 
 	Mast.routes.index = function(query,page) {
-	    var tree = new Mast.components.PartyTracksList();
+	    app.tracks = new Mast.components.PartyTracksList({where: { partyId : partyId }});
 	}
 
-	Mast.raise({ socket: false });
+	Mast.raise({
+		//baseurl: "http://localhost:1337"
+	});
 
 	$(function() {
 		// autocomplete setup

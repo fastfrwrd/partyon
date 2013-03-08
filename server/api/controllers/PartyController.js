@@ -38,16 +38,6 @@ var PartyController = {
 
 			res.view('party/view', { party : party });
 		});
-	},
-
-	tracks: function(req,res,next) {
-		if(req.param('id')) {
-			Track.findAllByPartyId(req.param('id')).done(function(err,tracks) {
-				if(err) return res.json({"message" : "server error"}, 500);
-				return res.json(_.map(tracks, function(t) { return _.omit(t, 'values'); }), 200);
-			});
-		} else return res.json([], 200);
 	}
-
 };
 module.exports = PartyController;

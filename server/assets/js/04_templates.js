@@ -42,9 +42,9 @@ _.each(Templates, function(t, key) { Templates[key] = Hogan.compile(t); });
 // Mast Templates
 _.extend(Templates, {
 	trackItem  : '<li>' +
-		'<span class="user"><img src="/user/{{ userId }}/img" /></span>' +
-		'<span class="name"><a href="{{ trackUri }}">{{ title }}</a></span>' +
-		'<span class="etc"><small>by</small> {{ artist }}</span>' +
-		'<span class="pull-right">{{ votes }} <small>votes</small></span>' +
+		//'<span class="user"><img src="/user/{{ userId }}/img" /></span>' +
+		//'<span class="name"><a href="{{ trackUri }}">{{ title }}</a></span>' +
+		//'<span class="etc"><small>by</small> {{ artist }}</span>' +
+		//'<span class="pull-right">{{ votes }} <small>votes</small></span>' +
 	'</li>'
 });
