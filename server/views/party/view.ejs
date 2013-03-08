@@ -11,8 +11,8 @@
 <script type="text/javascript">
 (function() {
 
-	var partyId = $("article.queue").data('data-partyon-partyid'),
-		app = {};
+	var app = {},
+		partyId = $("article.queue").attr('data-partyon-partyid');
 
 	Mast.registerModel('Track', {
 		defaults: {
@@ -20,13 +20,17 @@
 			userId: 0,
 			trackUri: "",
 			artists: "",
-			votes: 0
+			votes: 0,
+			partyId: partyId
 		}
-	})
+	});
 
 	Mast.registerCollection('PartyTracks', {
 		url : '/track',
-		model : 'Track'
+		model : 'Track',
+		comparator: function(track) {
+			return -track.get('votes');
+		}
 	});
 
 	Mast.registerTree("PartyTracksList", {
@@ -41,7 +45,7 @@
 	});
 
 	Mast.routes.index = function(query,page) {
-	    app.tracks = new Mast.components.PartyTracksList({where: { partyId : partyId }});
+	    app.tracks = new Mast.components.PartyTracksList({where : { partyId : partyId } });
 	}
 
 	Mast.raise({
@@ -61,20 +65,12 @@
 				});
 			},
 			select: function(ev, ui) {
-				var track = new Mast.models.Track({
+				var model = app.tracks.collection.create({
 					trackUri : ui.item.href,
 					title : ui.item.name,
 					artist : _.pluck(ui.item.artists, 'name').join(', '),
-					partyId : $(ev.target).closest('article').attr('data-partyon-partyid'),
+					partyId : partyId,
 					votes : 1
-				});
-				track.save({}, {
-					success:function(model) {
-						// update here!
-					},
-					error: function() {
-						console.error('error adding track', arguments);
-					}
 				});
 			}
 		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
