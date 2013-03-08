@@ -1,13 +1,16 @@
 var Templates = {
 	snapshot :
 		'<div class="snapshot">' +
-			'<div class="well">' +
-				'<div class="preview">' +
+			'<div class="well" style="margin-top:20px">' +
+				'<div class="preview hide">' +
 					'<h5>To sign in, we\'re gonna take a screenshot of you. <em>No joke!</em></h5>' +
-					'<video autoplay width="640"></video>' +
+					'<video width="640"></video>' +
 					'<div class="button-row">' +
-						'<button class="take btn btn-large btn-block hide">Oh snap!</button>' +
+						'<button class="take btn btn-large btn-block">Oh snap!</button>' +
 					'</div>' +
+				'</div>' +
+				'<div class="upload hide">' +
+					'<h5>Here we need to do photo upload.</h5>' +
 				'</div>' +
 				'<div class="view hide">' +
 					'<h5>To save your image, crop it and click "Party On!"</h5>' +
@@ -30,7 +33,15 @@ var Templates = {
 		'<a href="#">' +
 			'<h5 class="name">{{ name }}</h5>' +
 			'<span class="artist">{{# artists }}{{^ first }}, {{/ first }}{{ name }}{{/ artists }}<span>' +
-		'</a>'
+		'</a>',
+
+	queueItem :
+		'<li>' +
+			'{{# user }}<span class="user"><img src="/user/{{ user.id }}/img" /></span>{{/ user }}' +
+			'<span class="name"><a href="{{ uri }}">{{ title }}</a></span>' +
+			'<span class="etc"><small>by</small> {{ artist }}</span>' +
+			'<span class="pull-right">{{ votes }} <small>votes</small></span>' +
+		'</li>'
 };
 
 _.each(Templates, function(t, key) { Templates[key] = Hogan.compile(t); });

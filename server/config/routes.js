@@ -26,9 +26,15 @@ module.exports.routes = {
 	'/' : {
 		controller : 'home'
 	},
+
+	/* parties */
 	'/p/:uri' : {
 		controller : 'party',
 		action : 'view'
+	},
+	'/party/:id/tracks' : {
+		controller: 'party',
+		action: 'tracks'
 	},
 
 	/* photos */
@@ -40,6 +46,8 @@ module.exports.routes = {
 		controller : 'user',
 		action : 'getPhoto'
 	},
+
+	/* users */
 	'post /user/switchParty' : {
 		controller : 'user',
 		action : 'switchParty'

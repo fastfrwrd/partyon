@@ -5,25 +5,44 @@
 	<form class="search">
 		<input type="text" class="sp-search input-xlarge">
 	</form>
-
-	<% if (party.tracks.length) { %>
-	<ul class="list">
-		<% party.tracks.forEach(function(track) { %>
-		<li>
-			<% if(track.userId) { %><span class="user"><img src="/user/<%= track.userId %>/img" /></span><% } %>
-			<span class="name"><a href="<%= track.trackUri %>"><%= track.title %></a></span>
-			<span class="etc"><small>by</small> <%= track.artist %></span>
-			<span class="pull-right"><%= track.votes %> <small>vote<% if(track.votes != 1) { %>s<% } %></small></span>
-		</li>
-		<% }); %>
-	</ul>
-	<% } else { %>
-		<p>No tracks have been added to this party. <em>Get this party started!</em></p>
-	<% } %>
+	<ul id="queue_list" class="list"></ul>
 </article>
+
+<div id="templates" class="hide"></div>
 
 <script type="text/javascript">
 (function() {
+	$('#templates').append($('<div />').attr('id','queue_item').html(Templates.queueItem));
+
+	Mast.registerComponent('TrackListItem', {
+		template : '#queue_item',
+		model : "Track",
+	  	outlet : '#queue_list',
+	  	subscriptions: {
+			'~track/create': function (id, data) {
+				console.log(id, data);
+				this.model.set(data);
+				this.render();
+			}
+		}
+	});
+
+	Mast.registerCollection('PartyTracks', {
+		url : '/party/' + $('.queue').attr('data-partyon-partyid') + '/tracks'
+	});
+
+	Mast.registerTree('PartyTracksList',{
+	    collection : 'PartyTracks',
+	    branchComponent : 'TrackListItem',
+	    init: function(){
+	        this.collection.fetch();
+	    }
+	});
+
+	Mast.raise({
+	    baseUrl: 'http://localhost:1337'
+	});
+
 	$(function() {
 		// autocomplete setup
 		$('.sp-search').autocomplete({

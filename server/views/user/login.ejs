@@ -48,11 +48,6 @@ $(function() {
 			'click .retake' : 'setup'
 		},
 
-		initialize : function(options) {
-			this.setup();
-			this.render();
-		},
-
 		take : function(ev) {
 			var self = this;
 			var $video = this.$('.preview video'),
@@ -63,6 +58,7 @@ $(function() {
 	    		'height': $video.height(),
 	    		'width': $video.width()
 	    	});
+
 	    	ctx.drawImage($video.get(0), 0, 0, $video.width(), $video.height());
 	    	var shorterSide = _.min([$video.width(), $video.height()]);
 
@@ -103,17 +99,30 @@ $(function() {
 		},
 
 		setup : function(ev) {
-			if(navigator.webkitGetUserMedia && !this.$('.preview video').attr('src')) { 
-				navigator.webkitGetUserMedia({ video:true }, 
-					function(stream) { 
-						this.$('.preview .take').show();
-						this.$('.preview video').attr('src', window.webkitURL.createObjectURL(stream)); 
-					}, 
-					function(e) { console.log("error"); } 
-				);
+			navigator.enabled = true;
+			navigator.getMedia = ( navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         //navigator.mozGetUserMedia ||
+                         navigator.msGetUserMedia);
+
+			if(navigator.getMedia) {
+				navigator.getMedia({
+					'video' : true
+				}, function(stream) {
+					var video = this.$('.preview video').get(0);
+					if (navigator.mozGetUserMedia) video.mozSrcObject = stream;
+					else {
+						var vendorURL = window.URL || window.webkitURL;
+						video.src = vendorURL.createObjectURL(stream);
+					}
+					this.$('.preview').show();
+					video.play();
+				}, function(err) { console.log("error", err); });
+			} else {
+				// photo upload
+				this.$('.upload').show();
 			}
 
-	    	this.$('.preview').show();
 	    	this.$('.view').hide();
 		},
 
@@ -136,11 +145,13 @@ $(function() {
 
 		render : function() {
 			this.$el.append(this.template.render());
+			this.setup();
 			return this;
 		}
 	});
 
 	var snapshot = new Snapshot();
+	snapshot.render();
 	<% } %>
 });
 </script>
