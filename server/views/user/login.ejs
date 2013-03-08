@@ -25,8 +25,6 @@
 <script type="text/javascript">
 
 $(function() {
-	Mast.registerModel('User');
-
 	var partyId = $('article.new').attr('data-partyon-partyid'),
 		userId = $('article.new').attr('data-partyon-userid'),
 		userPartyId = $('article.new').attr('data-partyon-userpartyid');
@@ -34,13 +32,16 @@ $(function() {
 	if(userId) {
 		$('.go').click(function(ev) {
 			ev.preventDefault();
-			Mast.models.User({id:userId}).set('partyId', partyId).save();
-			window.location.reload();
+			$.post('/user/switchParty/' + partyId, function(status) {
+				window.location.reload();
+			});
 		});
 
 		$('.back').click(function(ev) {
 			ev.preventDefault();
-			window.location = '/party/' + userPartyId + '/view';
+			$.getJSON('/party/' + userPartyId, function(data) {
+				window.location = '/p/' + data.uri;
+			});
 		});
 	} else {
 		Mast.registerComponent('snapshot', {
@@ -160,7 +161,7 @@ $(function() {
 	}
 	
 	Mast.raise({
-		sockets: false
+		socket: false
 	});
 
 });

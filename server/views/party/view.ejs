@@ -29,7 +29,8 @@
 	Mast.registerCollection('PartyTracks', {
 		url : '/track',
 		model : 'Track',
-		emptyHTML: "<li>No tracks yet for this party.</li>",
+		data : $.param({ partyId: partyId }),
+		autoFetch: false,
 		comparator: function(track) {
 			return -track.get('votes');
 		}
@@ -39,7 +40,13 @@
 		outlet : '#queue-list',
 	   	template : '.queue-list',
 	    collection : "PartyTracks",
-	    branchComponent : "TrackListItem"
+	    branchComponent : "TrackListItem",
+		emptyHTML: "<li>No tracks yet for this party.</li>",
+		loadingHTML: "<li>Loading...</li>",
+		errorHTML: "<li>There was an error retrieving tracks. Bummer, dude.</li>",
+	    init: function() {
+	    	this.fetchCollection({ partyId : partyId });
+	    }
 	});
 
 	Mast.registerComponent('TrackListItem', {
@@ -47,7 +54,7 @@
 	});
 
 	Mast.routes.index = function(query,page) {
-	    app.tracks = new Mast.components.PartyTracksList({where : { partyId : partyId } });
+	    app.tracks = new Mast.components.PartyTracksList();
 	}
 
 	Mast.raise({
@@ -67,7 +74,7 @@
 				});
 			},
 			select: function(ev, ui) {
-				var model = app.tracks.appendBranch({
+				var model = app.tracks.addBranch({
 					trackUri : ui.item.href,
 					title : ui.item.name,
 					artist : _.pluck(ui.item.artists, 'name').join(', '),
