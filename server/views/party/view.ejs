@@ -25,14 +25,16 @@
 			trackUri: "",
 			artists: "",
 			votes: 0,
-			partyId: partyId
+			partyId: partyId,
+			users : function() {
+				return this.get('userId').split(',');
+			}
 		}
 	});
 
 	Mast.registerCollection('PartyTracks', {
 		url : '/track',
 		model : 'Track',
-		data : $.param({ partyId: partyId }),
 		autoFetch: false,
 		comparator: function(track) {
 			return -track.get('votes');
@@ -89,10 +91,16 @@
 					title : ui.item.name,
 					artist : _.pluck(ui.item.artists, 'name').join(', '),
 					partyId : partyId,
-					userId: userId,
 					votes : 1
 				});
+				model.url = function() { return "/track" };
 				model.save();
+				// if track already exists in collection, resort with new vote
+
+			},
+			search: function() {
+
+
 			}
 		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 			return $( "<li>" )
