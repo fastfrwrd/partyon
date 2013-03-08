@@ -32,7 +32,12 @@
 		</article>
 
 		<div class="empty"></div>
-		<li class="party-track"><span class="name">asdfa</span><span class="etc">- asdfasd</span><span class="pull-right">8.1</span></li>
+		<li class="party-track">
+			<span class="user"><img src="http://localhost:1337/user/{{ userId }}/img"></span>
+			<a class="name" href="{{ trackUri }}">{{ title }}</a>
+			<span class="etc">- {{ artist }}</span>
+			<span class="pull-right">{{ votes }} <small>votes</small></span>
+		</li>
 
 		<article class="new">
 			<h3 class="title">New Party</h3>
