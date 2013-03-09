@@ -1,6 +1,9 @@
 html {
     text-shadow: none;
 }
+ul {
+    list-style: none;
+}
 
 article {
     border-radius: 8px;

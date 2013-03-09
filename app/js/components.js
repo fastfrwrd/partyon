@@ -3,24 +3,12 @@ Mast.registerModel('Party', {
 })
 Mast.registerModel('Track')
 
-Mast.Component = Mast.Component.extend({
-  show: function() {
-    this.$el.removeClass('hide');
-  },
-  hide: function() {
-    this.$el.addClass('hide');
-  }
-})
-
 Mast.registerComponent('New', {
-  outlet: '#app',
   template: '.new',
-
   events: {
     'change input': 'inputChanged',
     'submit form': 'submitPressed'
   },
-
   afterRender: function() {
     this.$phone = this.$el.find('#inputPhone');
     this.$title = this.$el.find('#inputTitle');
@@ -53,9 +41,9 @@ Mast.registerComponent('New', {
 })
 
 Mast.registerComponent('Party', {
-  outlet: '#app',
   template: '.party',
   model: 'Party',
+  autoRender: false,
   regions: {
     '.track-list': 'TrackList'
   }
@@ -68,6 +56,10 @@ Mast.registerCollection('Tracks', {
   comparator: function(track) {
     return -track.get('votes');
   }
+});
+
+Mast.registerComponent('TrackListItem', {
+  template: '.party-track'
 });
 
 Mast.registerTree("TrackList", {
@@ -85,10 +77,33 @@ Mast.registerTree("TrackList", {
     '~track/create': function (track) {
       if (track.partyId != this.partyId) return;
       this.collection.add(track);
+    },
+    '~track/:id/update': function (id, attributes) {
+      this.collection.get(id).set(attributes);
+      this.collection.sort();
+      this.render();
     }
   },
 });
 
-Mast.registerComponent('TrackListItem', {
-  template: '.party-track'
-});
+
+
+Mast.registerComponent('App', {
+  outlet: '#app',
+  template: '.panes',
+  regions: {
+    '.new-container': 'New',
+    '.party-container': 'Party'
+  },
+  createParty: function(data) {
+    var party = new Mast.models.Party(data);
+    party.save(null, {
+      success: function(model) {
+        app.child('.new-container').close();
+        var party = app.child('.party-container');
+        party.model = model;
+        party.append();
+      }
+    })
+  }
+})

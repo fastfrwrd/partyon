@@ -49,7 +49,14 @@
 		errorHTML: "<li>There was an error retrieving tracks. Bummer, dude.</li>",
 	    init: function() {
 	    	this.fetchCollection({ partyId : partyId });
-	    }
+	    },
+		subscriptions: {
+			'~track/:id/update': function (id, attributes) {
+				this.collection.get(id).set(attributes);
+				this.collection.sort();
+				this.render();
+			}
+		},
 	});
 
 	Mast.registerComponent('TrackListItem', {

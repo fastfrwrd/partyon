@@ -8,7 +8,8 @@ module.exports = {
 		trackUri: 'STRING',
 		title: 'STRING',
 		artist: 'STRING',
-		partyId: "INTEGER"
+		partyId: "INTEGER",
+        votes: 'INTEGER'
 	}
 
 };
