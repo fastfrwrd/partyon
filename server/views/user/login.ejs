@@ -50,41 +50,71 @@ $(function() {
 			events : {
 				'click .take' : 'take',
 				'click .upload' : 'upload',
-				'click .retake' : 'setup'
+				'click .retake' : 'afterRender',
+				'click .take-picture' : 'triggerCamera',
+				'change .camera' : 'usePicture'
 			},
 
-			init : function() {
-				this.setup();
+			afterRender : function() {
+				Mast.isMobile ? this.setupMobile() : this.setupDesktop()
+			},
+
+			setupMobile : function(ev) {
+				this.$('.view').hide();
+				this.$('.previewMobile').show();
+			},
+
+			triggerCamera : function(ev) {
+				this.$('.camera').trigger('click');
+			},
+
+			usePicture : function(ev) {
+				var self = this,
+					file = ev.target.files[0],
+					img = document.createElement("img"),
+					reader = new FileReader();
+				reader.onload = function(RADURL) {
+					img.src = RADURL.target.result;
+			    	self.$('.previewMobile').hide();
+			    	setTimeout(function() {
+						self.showCropTool($(img), img.naturalWidth, img.naturalHeight);
+			    	}, 0);
+				}
+				reader.readAsDataURL(file);
 			},
 
 			take : function(ev) {
+				var $video = this.$('.preview video')
+		    	this.showCropTool($video, $video.width(), $video.height());
+			},
+
+			showCropTool : function($image, width, height) {
+
 				var self = this;
-				var $video = this.$('.preview video'),
-		    		$canvas = this.$('.view canvas'),
+				var $canvas = this.$('.view canvas'),
 		    		ctx = $canvas.get(0).getContext('2d');
 
 		    	$canvas.attr({
-		    		'height': $video.height(),
-		    		'width': $video.width()
+		    		'height': height,
+		    		'width': width
 		    	});
+		    	ctx.drawImage($image.get(0), 0, 0, width, height);
+		    	var shorterSide = _.min([width, height]);
 
-		    	ctx.drawImage($video.get(0), 0, 0, $video.width(), $video.height());
-		    	var shorterSide = _.min([$video.width(), $video.height()]);
-
-		    	this.crop = ($video.width() === shorterSide)
+		    	this.crop = (width === shorterSide)
 					? { 
 						x: 0, 
-						y: ($video.height() - shorterSide) / 2, 
-						x2: $video.width(), 
-						y2: ($video.height() + shorterSide) / 2, 
+						y: (height - shorterSide) / 2, 
+						x2: width, 
+						y2: (height + shorterSide) / 2, 
 						w: shorterSide, 
 						h: shorterSide 
 					}
 					: {
-						x: ($video.width() - shorterSide) / 2,
+						x: (width - shorterSide) / 2,
 						y: 0,
-						x2: ($video.width() + shorterSide) / 2,
-						y2: $video.height(),
+						x2: (width + shorterSide) / 2,
+						y2: height,
 						w: shorterSide,
 						h: shorterSide
 					};
@@ -107,7 +137,7 @@ $(function() {
 		   		});
 			},
 
-			setup : function(ev) {
+			setupDesktop : function(ev) {
 				navigator.enabled = true;
 				navigator.getMedia = ( navigator.getUserMedia ||
 	                         navigator.webkitGetUserMedia ||
