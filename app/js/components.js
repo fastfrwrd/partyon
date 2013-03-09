@@ -56,12 +56,6 @@ Mast.registerComponent('Party', {
   outlet: '#app',
   template: '.party',
   model: 'Party',
-  // subscriptions: {
-  //   '~party/:id/update': function (id, data) {
-  //     this.model.set(data);
-  //     this.render();
-  //   }
-  // },
   regions: {
     '.track-list': 'TrackList'
   }
@@ -86,7 +80,13 @@ Mast.registerTree("TrackList", {
   init: function() {
     this.partyId = this.parent.model.id;
     this.fetchCollection({ partyId : this.partyId });
-  }
+  },
+  subscriptions: {
+    '~track/create': function (track) {
+      if (track.partyId != this.partyId) return;
+      this.collection.add(track);
+    }
+  },
 });
 
 Mast.registerComponent('TrackListItem', {

@@ -16,6 +16,9 @@
 		userId = $("article.queue").attr('data-partyon-userid');
 
 	Mast.registerModel('Track', {
+		url : function() {
+			return '/track'
+		},
 		defaults: {
 			title: "",
 			userId: 0,
@@ -74,7 +77,7 @@
 				});
 			},
 			select: function(ev, ui) {
-				var model = app.tracks.addBranch({
+				var model = new Mast.models.Track({
 					trackUri : ui.item.href,
 					title : ui.item.name,
 					artist : _.pluck(ui.item.artists, 'name').join(', '),
@@ -82,6 +85,7 @@
 					userId: userId,
 					votes : 1
 				});
+				model.save();
 			}
 		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 			return $( "<li>" )
