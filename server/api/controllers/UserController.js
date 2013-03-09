@@ -6,7 +6,7 @@ var fs = require("fs");
 var UserController = {
 	getPhoto: function (req,res) {
 		try {
-			var img = fs.readFileSync('assets/img/upload/' + req.param('id') + '.png');
+			var img = fs.readFileSync('public/img/upload/' + req.param('id') + '.png');
 			res.writeHead(200, {'Content-Type': 'image/png' });
 			res.end(img, 'binary');
 		} catch(err) {
@@ -20,7 +20,7 @@ var UserController = {
 		User.create({}).done(function(err, user) {
 			if(err) return res.json({"message" : "user creation failed"}, 500);
 
-			var imgUrl = "assets/img/upload/" + user.id + ".png";
+			var imgUrl = "public/img/upload/" + user.id + ".png";
 			fs.writeFile(imgUrl, base64Data, 'base64', function(err) {
 				if(err) return res.json({"message" : "file upload failed"}, 500);
 

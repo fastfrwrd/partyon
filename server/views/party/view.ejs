@@ -58,11 +58,19 @@
 				this.collection.sort();
 				this.render();
 			}
-		},
+		}
 	});
 
 	Mast.registerComponent('TrackListItem', {
 		template : '.party-track',
+		events : {
+			'click .vote' : 'vote'
+		},
+		vote : function(ev) {
+			ev.preventDefault();
+			this.model.set('votes', this.model.get('votes') + 1 );
+			// MUST SAVE SOMEOHOW
+		}
 	});
 
 	Mast.routes.index = function(query,page) {
@@ -74,15 +82,14 @@
 	});
 
 	$(function() {
+		// put search-result into the template library
+		Mast.TemplateLibrary['.search-result'] = $('.search-result').outerHTML().replace('%7B%7B', '{{').replace('%7D%7D', '}}');;
+
 		// autocomplete setup
 		$('.sp-search').autocomplete({
 			source: function(req, res) {
 				$.getJSON("http://ws.spotify.com/search/1/track.json?q=" + req.term, function(data) {
-					res(_.map(_.first(data.tracks, 5), function(track) {
-						if(track.artists.length > 0) track.artists[0].first = true;
-
-						return track;
-					}));
+					res(_.map(_.first(data.tracks, 5), function(track) { return track; }));
 				});
 			},
 			select: function(ev, ui) {
@@ -95,17 +102,14 @@
 				});
 				model.url = function() { return "/track" };
 				model.save();
-				// if track already exists in collection, resort with new vote
-
 			},
 			search: function() {
 
-
 			}
 		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-			return $( "<li>" )
-				.append( Templates.spotifyItem.render(item) )
-				.appendTo( ul );
+			return $('<li />')
+				.append(_.template(Mast.TemplateLibrary['.search-result'], item))
+				.appendTo(ul);
 		};
 	});
 })();

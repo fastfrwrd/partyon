@@ -26,7 +26,7 @@ var TrackController = {
 					headers: {
 						'Content-Type': 'application/json'
 					}
-				})
+				});
 				var body = { votes : ++track.votes };
 				request.write(JSON.stringify(body));
 				request.end();
@@ -36,7 +36,7 @@ var TrackController = {
 				// 	if(err) return res.json(err, 500);
 				// 	else return res.json(track, 200);
 				// });
-		
+
 			} else {
 				req.params.userId = req.session.user.id;
 				next();

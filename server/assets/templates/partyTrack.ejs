@@ -1,6 +1,9 @@
-<li class="party-track">
-	<span class="user"><img src="/user/{{userId}}/img" /></span>
+<li class="party-track" data-trackid="{{id}}">
+	<span class="user"><img src="/user/{{userId}}/img.png" /></span>
 	<span class="name"><a href="{{trackUri}}">{{ title }}</a></span>
 	<span class="etc"><small>by</small> {{artist}}</span>
-	<span class="pull-right">{{votes}} <small>votes</small></span>
+	<span class="pull-right vote-block">
+		<button class="vote btn btn-success pull-right"><i class="icon-white icon-plus-sign"></i></button>
+	</span>
+	<span class="pull-right vote-count">{{votes}} <small>votes</small></span>
 </li>

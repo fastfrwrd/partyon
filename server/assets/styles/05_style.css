@@ -36,7 +36,7 @@ article form {
     margin: 0;
 }
     .list li {
-        padding: 1.5em 1.714em;
+        padding: 1.5em 1.77em;
         background-color: #ECF0F1;
         margin-top: 2px;
         -webkit-transition: 0.25s;
@@ -140,6 +140,7 @@ input[type="color"]:focus,
 .queue {
     background-color: #C0392B;
 }
+
     .queue .title {
         background-color: #E74C3C;
     }
@@ -148,6 +149,17 @@ input[type="color"]:focus,
         margin-bottom: 0;
         padding-bottom: 0;
     }
+
+    .queue .party-track {
+    }
+
+    .queue .party-track .vote {
+        margin-left: 10px;
+    }
+
+        .queue .party-track .vote i {
+            margin-top: 3px;
+        }
 
 .history {
     background-color: #16A085;

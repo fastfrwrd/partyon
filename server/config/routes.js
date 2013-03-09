@@ -42,7 +42,7 @@ module.exports.routes = {
 		controller : 'user',
 		action : 'uploadPhoto'
 	},
-	'get /user/:id/img' : {
+	'get /user/:id/img.png' : {
 		controller : 'user',
 		action : 'getPhoto'
 	},

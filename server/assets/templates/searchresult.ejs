@@ -1,0 +1,7 @@
+<a href="#" class="search-result">
+	<h5 class="name">{{ name }}</h5>
+	<span class="artist">{% _.each(artists, function(a, i) { %}
+		{% if(i !== 0) { %} ,{% } %}
+		{{ a.name }}
+	{% }); %}<span>
+</a>
