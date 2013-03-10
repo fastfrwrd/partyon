@@ -6,9 +6,8 @@
         "twilio": "*",
         "forever": "*",
         "sails": "0.8.89-1",
-        "hulk-hogan": "*",
         "underscore": "1.4.4",
-        "echonest" : "*"
+        "echonest": "*"
     },
     "scripts": {
         "start": "sudo .app.js"
@@ -21,6 +20,6 @@
     "engines": {
         "node": "0.8.x"
     },
-    "author": "",
+    "author": "Tucker Bickler and Paul Marnach",
     "license": "MIT"
 }

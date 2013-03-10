@@ -67,7 +67,6 @@ var PartyController = {
 				if(err) res.json({"message" : "Something went wrong."}, 302);
 				var progress = 0;
 				_.each(tracks, function(t) {
-
 					t = _.extend(t, {
 						userId : -1,
 						votes : 1,
@@ -75,11 +74,18 @@ var PartyController = {
 						played : false
 					});
 
-					var request = http.request({
-						hostname: global.sails.config.host,
-						port: global.sails.config.port,
-						method: 'POST',
-						path: '/track/create'
+					Track.create(t).done(function(err,track) {
+						progress++;
+						if(progress === count) {
+							// trigger refreshes
+							var request = http.request({
+								hostname: global.sails.config.host,
+								port: global.sails.config.port,
+								method: 'PUT',
+								path: '/track/'+track.id
+							});
+							request.end();
+						}
 					});
 				});
 			});

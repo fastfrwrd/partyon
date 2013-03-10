@@ -73,9 +73,10 @@
     			this.collection.add(track);
 			},
 			'~track/:id/update': function (id, attributes) {
-				if (track.partyId != this.partyId) return;
+				var track = this.collection.get(id);
+				if (track.get('partyId') != this.partyId) return;
 
-				this.collection.get(id).set(attributes);
+				track.set(attributes);
 				this.collection.sort();
 				this.render();
 			}
