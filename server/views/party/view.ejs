@@ -38,6 +38,15 @@
 		autoFetch: false,
 		comparator: function(track) {
 			return -track.get('votes');
+		},
+
+		events : {
+			'click .vote' : 'vote'
+		},
+
+		vote : function(ev) {
+			ev.preventDefault();
+			// voting
 		}
 	});
 
@@ -49,9 +58,11 @@
 		emptyHTML: "<li>No tracks yet for this party.</li>",
 		loadingHTML: "<li>Loading...</li>",
 		errorHTML: "<li>There was an error retrieving tracks. Bummer, dude.</li>",
+
 	    init: function() {
 	    	this.fetchCollection({ partyId : partyId });
 	    },
+
 		subscriptions: {
 			'~track/:id/update': function (id, attributes) {
 				this.collection.get(id).set(attributes);
@@ -62,15 +73,7 @@
 	});
 
 	Mast.registerComponent('TrackListItem', {
-		template : '.party-track',
-		events : {
-			'click .vote' : 'vote'
-		},
-		vote : function(ev) {
-			ev.preventDefault();
-			this.model.set('votes', this.model.get('votes') + 1 );
-			// MUST SAVE SOMEOHOW
-		}
+		template : '.party-track'
 	});
 
 	Mast.routes.index = function(query,page) {
