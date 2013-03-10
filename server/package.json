@@ -8,8 +8,7 @@
         "sails": "0.8.89-1",
         "hulk-hogan": "*",
         "underscore": "1.4.4",
-        "echonest" : "*",
-        "twilio" : "*"
+        "echonest" : "*"
     },
     "scripts": {
         "start": "sudo .app.js"
