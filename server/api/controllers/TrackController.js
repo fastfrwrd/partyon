@@ -18,11 +18,10 @@ var TrackController = {
 
 				// LOOK AT THIS CRAZY!
 				var request = http.request({
-					hostname: 'localhost',
-					port: 1337,
+					hostname: global.sails.config.host,
+					port: global.sails.config.port,
 					method: 'PUT',
-					path: '/track/'+track.id,
-					headers: { 'Content-Type': 'application/json' }
+					path: '/track/'+track.id
 				});
 				var body = { votes : ++track.votes };
 				request.write(JSON.stringify(body));
@@ -34,10 +33,7 @@ var TrackController = {
 				// 	else return res.json(track, 200);
 				// });
 
-			} else {
-				req.params.userId = req.session.user.id;
-				next();
-			}
+			} else next();
 		});
 	}
 

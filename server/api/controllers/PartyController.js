@@ -1,6 +1,6 @@
-var sms = require('../services/sms.js');
-var echonest = require('echonest');
-var sails = require('sails');
+var Similar = require('../services/similar'),
+	sms = require('../services/sms.js'),
+	http = require('http');
 
 /*---------------------
 	:: Party 
@@ -53,51 +53,38 @@ var PartyController = {
 			if(!tracks) return res.view('404', 404);
 
 			var artists = [],
-				newTracks = (req.param('count')) ? req.param('count') : 20;
+				count = (req.param('count')) ? req.param('count') : 20;
 
-			// pick artists better
-			for(i=0; i < tracks.length && artists.length < 5; i++) {
+			// pick artists from the current playlist
+			for(i=0; i < tracks.length && artists.length < 3; i++) {
 				var randoCalrissian = Math.floor(tracks.length * Math.random());
-				console.log(randoCalrissian, tracks.length);
+
 				if(tracks[randoCalrissian].artist.indexOf(',') === -1 && !_.contains(artists, tracks[i].artist))
 					artists.push(tracks[i].artist);
 			}
 
-			console.log(artists);
-			// hit echonest and get similar songs
-			var myNest = new echonest.Echonest({
-				api_key : 'XXXXXXXXXX'  // need to dynamically get this
-			});
+			similar.get(artists, count, function(err, tracks) {
+				if(err) res.json({"message" : "Something went wrong."}, 302);
+				var progress = 0;
+				_.each(tracks, function(t) {
 
-			myNest.playlist.static({
-				artist : artists.join(','),
-				type : 'artist-radio',
-				bucket : ["id:spotify-WW", "tracks"],
-				limit : true,
-				results : newTracks,
-				dmca : true
-			}, function(err, nestRes) {
-				if(err || !nestRes) return res.json({}, 500);
-
-
-				var songsToAdd = [];
-				_.each(nestRes.songs, function(s) {
-					var obj = {
-						trackUri : _.first(s.tracks).foreign_id.replace('spotify-WW','spotify'),
-						name : s.name,
-						artist : s.artist_name,
+					t = _.extend(t, {
 						userId : -1,
+						votes : 1,
 						partyId : req.param('id'),
-						votes : 1
-					};
+						played : false
+					});
 
-					Track.create(obj).done(function(err,track) {
-						songsToAdd.push(track);
+					var request = http.request({
+						hostname: global.sails.config.host,
+						port: global.sails.config.port,
+						method: 'POST',
+						path: '/track/create'
 					});
 				});
-
-				return res.json({songs : songsToAdd}, 200);
 			});
+
+			res.send({"message" : "working"}, 200);
 		});
 	}
 };

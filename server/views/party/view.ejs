@@ -111,7 +111,8 @@
 					title : ui.item.name,
 					artist : _.pluck(ui.item.artists, 'name').join(', '),
 					partyId : partyId,
-					votes : 1
+					votes : 1,
+					userId : userId
 				});
 				model.url = function() { return "/track" };
 				model.save();
