@@ -1,8 +1,9 @@
 {
-    "name": "api",
+    "name": "partyon",
+    "subdomain": "partyon",
     "private": true,
     "version": "0.0.1",
-    "description": "partyon api",
+    "description": "Party on, Wayne! This is a Spotify App hooked up to a Sails server/web interface that allows you to set up a party that allows participants to request and vote down songs IRL.",
     "dependencies": {
         "hulk-hogan": "*",
         "underscore": "1.4.4"
@@ -15,6 +16,9 @@
     "repository": {
       "type": "git",
       "url": "git://github.com/fastfrwrd/partyon.git"
+    },
+    "engines": {
+        "node": "0.8.x"
     },
     "author": "",
     "license": "MIT"

@@ -17,15 +17,12 @@ var TrackController = {
 			if(track) {
 
 				// LOOK AT THIS CRAZY!
-				var client = http.createClient(1337, 'localhost');
 				var request = http.request({
 					hostname: 'localhost',
 					port: 1337,
 					method: 'PUT',
 					path: '/track/'+track.id,
-					headers: {
-						'Content-Type': 'application/json'
-					}
+					headers: { 'Content-Type': 'application/json' }
 				});
 				var body = { votes : ++track.votes };
 				request.write(JSON.stringify(body));
