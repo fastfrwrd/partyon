@@ -25,6 +25,7 @@ var PartyController = {
 			// Check if there's a party with the same slug, and tack the ID on the end if so
 			if(_.where(parties, { uri : uri }).length > 0) uri += "-" + id;
 
+			sms.setHost(req.params.phone);
 			sms.send(req.params.phone, 'Scha-wing! http://partyonwayne.co/p/'+uri);
 
 			req.params.uri = uri;
