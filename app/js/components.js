@@ -92,7 +92,6 @@ Mast.registerTree("TrackList", {
       this.render();
     }
   },
-
   startPlaying : function(track) {
     if(this.collection.size() === 1 && this.collection.first().get('trackUri') !== track.uri) {
       app.player.play(track.trackUri, app.playlist);

@@ -1,4 +1,6 @@
 var sms = require('../services/sms.js');
+var echonest = require('echonest');
+var sails = require('sails');
 
 /*---------------------
 	:: Party 
@@ -21,15 +23,13 @@ var PartyController = {
 				name = "Fabulous Party";
 			}
 			// Check if there's a party with the same slug, and tack the ID on the end if so
-			Party.findAllByUri(uri).done(function(err, party) {
-				if(party) uri += "-" + id;
+			if(_.where(parties, { uri : uri }).length > 0) uri += "-" + id;
 
-				sms.sendSms(req.params.phone, 'Scha-wing! http://partyonwayne.co/p/'+uri);
+			sms.sendSms(req.params.phone, 'Scha-wing! http://partyonwayne.co/p/'+uri);
 
-				req.params.uri = uri;
-				req.params.name = name;
-				next();
-			});
+			req.params.uri = uri;
+			req.params.name = name;
+			next();
 		});
 	},
 
@@ -43,6 +43,61 @@ var PartyController = {
 			Track.findAllByPartyId(party.id).done(function(err,tracks) { party.tracks = tracks; });
 
 			res.view('party/view', { party : party, user : req.session.user });
+		});
+	},
+
+	similar: function(req,res,next) {
+		if(!req.param('id')) return res.view('404', 404);
+		Track.findAllByPartyId(req.param('id')).done(function(err, tracks) {
+			if(err) return res.view('500', 500);
+			if(!tracks) return res.view('404', 404);
+
+			var artists = [],
+				newTracks = (req.param('count')) ? req.param('count') : 20;
+
+			// pick artists better
+			for(i=0; i < tracks.length && artists.length < 5; i++) {
+				var randoCalrissian = Math.floor(tracks.length * Math.random());
+				console.log(randoCalrissian, tracks.length);
+				if(tracks[randoCalrissian].artist.indexOf(',') === -1 && !_.contains(artists, tracks[i].artist))
+					artists.push(tracks[i].artist);
+			}
+
+			console.log(artists);
+			// hit echonest and get similar songs
+			var myNest = new echonest.Echonest({
+				api_key : 'XXXXXXXXXX'  // need to dynamically get this
+			});
+
+			myNest.playlist.static({
+				artist : artists.join(','),
+				type : 'artist-radio',
+				bucket : ["id:spotify-WW", "tracks"],
+				limit : true,
+				results : newTracks,
+				dmca : true
+			}, function(err, nestRes) {
+				if(err || !nestRes) return res.json({}, 500);
+
+
+				var songsToAdd = [];
+				_.each(nestRes.songs, function(s) {
+					var obj = {
+						trackUri : _.first(s.tracks).foreign_id.replace('spotify-WW','spotify'),
+						name : s.name,
+						artist : s.artist_name,
+						userId : -1,
+						partyId : req.param('id'),
+						votes : 1
+					};
+
+					Track.create(obj).done(function(err,track) {
+						songsToAdd.push(track);
+					});
+				});
+
+				return res.json({songs : songsToAdd}, 200);
+			});
 		});
 	}
 };

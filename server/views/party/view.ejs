@@ -26,6 +26,7 @@
 			artists: "",
 			votes: 0,
 			partyId: partyId,
+			played: false,
 			users : function() {
 				return this.get('userId').split(',');
 			}
@@ -60,11 +61,20 @@
 		errorHTML: "<li>There was an error retrieving tracks. Bummer, dude.</li>",
 
 	    init: function() {
-	    	this.fetchCollection({ partyId : partyId });
+	    	this.fetchCollection({ 
+	    		partyId : partyId,
+	    		played : false 
+	    	});
 	    },
 
 		subscriptions: {
+			'~track/create': function (track) {
+				if (track.partyId != partyId) return;
+    			this.collection.add(track);
+			},
 			'~track/:id/update': function (id, attributes) {
+				if (track.partyId != this.partyId) return;
+
 				this.collection.get(id).set(attributes);
 				this.collection.sort();
 				this.render();
