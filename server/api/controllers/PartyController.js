@@ -19,7 +19,9 @@ var PartyController = {
 				name = "Fabulous Party";
 			}
 			// Check if there's a party with the same slug, and tack the ID on the end if so
-			if(Party.findByName(uri).length) uri += "-" + id;
+			Party.findAllByUri(uri).done(function(err, party) {
+				if(party) uri += "-" + id;
+			});
 
 			req.params.uri = uri;
 			req.params.name = name;

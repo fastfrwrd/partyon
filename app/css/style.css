@@ -27,6 +27,12 @@ article p {
     margin-bottom: 0;
     color: white;
 }
+
+    .title small {
+        color: #ECF0F1;
+        margin-left: 30px;
+    }
+
 .list {
     list-style: none;
     padding: 0;
@@ -136,6 +142,10 @@ input[type="color"]:focus,
 }
     .party .title {
         background-color: #E74C3C;
+    }
+
+    .party .uri  {
+        min-width: 250px;
     }
 
 .history {

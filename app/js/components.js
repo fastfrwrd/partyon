@@ -1,7 +1,12 @@
+var sp = getSpotifyApi();
+var models = sp.require('$api/models');
+var views = sp.require('$api/views');
+
 Mast.registerModel('Party', {
-    urlRoot: '/party',
-})
-Mast.registerModel('Track')
+    urlRoot: '/party'
+});
+
+Mast.registerModel('Track');
 
 Mast.registerComponent('New', {
   template: '.new',
@@ -77,16 +82,23 @@ Mast.registerTree("TrackList", {
     '~track/create': function (track) {
       if (track.partyId != this.partyId) return;
       this.collection.add(track);
+      app.playlist.add(track.trackUri);
+      this.startPlaying(track);
     },
     '~track/:id/update': function (id, attributes) {
-      this.collection.get(id).set(attributes);
+      var track = this.collection.get(id);
+      newTrack.set(attributes);
       this.collection.sort();
       this.render();
     }
   },
+
+  startPlaying : function(track) {
+    if(this.collection.size() === 1 && this.collection.first().get('trackUri') !== track.uri) {
+      app.player.play(track.trackUri, app.playlist);
+    }
+  }
 });
-
-
 
 Mast.registerComponent('App', {
   outlet: '#app',
@@ -103,7 +115,11 @@ Mast.registerComponent('App', {
         var party = app.child('.party-container');
         party.model = model;
         party.append();
+        // setup user and song counts
+        party.$('.title .uri').val(Mast.Socket.baseurl + "/p/" + party.$('.title .uri').val());
+        app.player = new views.Player();
+        app.playlist = new models.Playlist();
       }
-    })
+    });
   }
 })
