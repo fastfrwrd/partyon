@@ -100,7 +100,6 @@ Mast.registerTree("TrackList", {
   startPlaying : function(track) {
     if(this.collection.size() === 1 && this.collection.first().get('trackUri') !== track.uri) {
       app.player.play(track.trackUri, app.playlist);
-      console.log(models);
       app.playlist.observe(models.EVENT.CHANGE, function(ev) {
         console.log(ev);
       });
