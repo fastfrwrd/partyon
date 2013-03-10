@@ -30,11 +30,5 @@ module.exports.adapters = {
 		user		: 'YOUR_MYSQL_USER',
 		password	: 'YOUR_MYSQL_PASSWORD',
 		database	: 'YOUR_MYSQL_DB'
-	},
-
-	echonest : {
-		api_key       : 'XXXXXXXXXX',
-		consumer_key  : 'XXXXXXXXXX',
-		shared_secret : 'XXXXXXXXXX'
 	}
 };

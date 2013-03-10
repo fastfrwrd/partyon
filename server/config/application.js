@@ -16,6 +16,11 @@ module.exports = {
 
 	log: {
 		level: 'verbose'
+	},
+	// inclue your own in server/config/local.js
+	echonest : {
+		api_key : "",
+		consumer_key : "",
+		shared_secret : ""
 	}
-
 };
