@@ -51,6 +51,12 @@ module.exports.routes = {
 	'post /user/switchParty' : {
 		controller : 'user',
 		action : 'switchParty'
+	},
+
+	/* sms */
+	'post /sms' : {
+		controller : 'sms',
+		action : 'incoming'
 	}
 
 	// If you want to set up a route only for a particular HTTP method/verb 
