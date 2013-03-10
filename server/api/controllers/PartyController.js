@@ -83,15 +83,16 @@ var PartyController = {
 								hostname: global.sails.config.host,
 								port: global.sails.config.port,
 								method: 'PUT',
-								path: '/track/'+track.id
+								path: '/party/'+req.param('id')
 							});
+							request.write(JSON.stringify({ "updatedAt" : 0 }));
 							request.end();
+
+							res.send(tracks, 200);
 						}
 					});
 				});
 			});
-
-			res.send({"message" : "working"}, 200);
 		});
 	}
 };
