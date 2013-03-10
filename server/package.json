@@ -1,8 +1,6 @@
 {
     "name": "partyon",
-    "subdomain": "partyon",
     "private": true,
-    "version": "0.0.1-14",
     "description": "Party on, Wayne! This is a Spotify App hooked up to a Sails server/web interface that allows you to set up a party that allows participants to request and vote down songs IRL.",
     "dependencies": {
         "forever": "*",
@@ -11,9 +9,9 @@
         "underscore": "1.4.4"
     },
     "scripts": {
-        "start": "sudo node .app.js"
+        "start": ".app.js"
     },
-    "main": "app.js",
+    "main": ".app.js",
     "repository": {
         "type": "git",
         "url": "git://github.com/fastfrwrd/partyon.git"
