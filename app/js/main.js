@@ -3,5 +3,5 @@ Mast.routes.index = function(query,page) {
 }
 
 Mast.raise({
-    baseurl: 'http://165.225.137.24:1337'
+    baseurl: 'http://165.225.137.24'
 });

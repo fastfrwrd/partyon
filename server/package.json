@@ -9,7 +9,7 @@
         "underscore": "1.4.4"
     },
     "scripts": {
-        "start": ".app.js"
+        "start": "sudo .app.js"
     },
     "main": ".app.js",
     "repository": {
