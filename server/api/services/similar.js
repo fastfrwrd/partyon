@@ -1,25 +1,25 @@
-var echonest = require('echonest'),
-	Similar = {
-		nest : new echonest.Echonest({
-			api_key : global.sails.config.echonest.api_key
-		}),
+var http = require("http"),
+	qs = require("qs");
 
+var Similar = {
 		get : function(artists, count, cb) {
 			if(!artists) {
 				cb(true);
 				return false;
 			}
 
-			var self = this;
+			var self = this,
+				q = qs.stringify({
+					artist : artists.join(','),
+					type : 'artist-radio',
+					bucket : ["id:spotify-WW","tracks"],
+					limit : true,
+					results : count,
+					dmca : true
+				}),
+				url = "http://developer.echonest.com/api/v4/playlist/static?";
 
-			self.nest.playlist.static({
-				artist : artists.join(','),
-				type : 'artist-radio',
-				bucket : ["id:spotify-WW","tracks"],
-				limit : true,
-				results : count,
-				dmca : true
-			}, function(err, nestRes) {
+			http.get(url + q, function(nestRes) {
 				if(err || !nestRes) {
 					cb(self, true);
 					return;
