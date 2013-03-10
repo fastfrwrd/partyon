@@ -1,3 +1,5 @@
+var sms = require('../services/sms.js');
+
 /*---------------------
 	:: Party 
 	-> controller
@@ -21,11 +23,13 @@ var PartyController = {
 			// Check if there's a party with the same slug, and tack the ID on the end if so
 			Party.findAllByUri(uri).done(function(err, party) {
 				if(party) uri += "-" + id;
-			});
 
-			req.params.uri = uri;
-			req.params.name = name;
-			next();
+				sms.sendSms(req.params.phone, 'Scha-wing! http://partyonwayne.co/p/'+uri);
+
+				req.params.uri = uri;
+				req.params.name = name;
+				next();
+			});
 		});
 	},
 
