@@ -79,7 +79,12 @@
 				track.set(attributes);
 				this.collection.sort();
 				this.render();
-			}
+			},
+			'~party/:id/update': function (id, attributes) {
+		      if (id != this.partyId) return;
+		      this.fetchCollection();
+		      this.collection.sort();
+		    },
 		}
 	});
 

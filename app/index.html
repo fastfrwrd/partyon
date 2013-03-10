@@ -29,7 +29,7 @@
 
 	<div style="display:none;" class="template-library" id="template-library">
 
-		<article class="party">
+		<article class="party" data-partyon-partyid="{{id}}">
 			<h3 class="title">
 				{{ name }}
 				<span class="pull-right">
@@ -39,6 +39,7 @@
 			</h3>
 
 			<ul class="track-list list"></ul>
+			<a href="{{ Mast.Socket.baseurl }}/party/similar?id={{ id }}" class="btn btn-large similar">Add 20 songs like these</a>
 		</article>
 
 		<div class="empty"></div>

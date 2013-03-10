@@ -81,12 +81,10 @@ var PartyController = {
 					Track.create(t).done(function(err,track) {
 						progress++;
 						console.log(progress, count);
-						if(progress === count) res.json(tracks, 200);	
+						if(progress === count) return res.json(tracks, 200);	
 					});
 				});
 			});
-
-			// res.send({"message" : "working"}, 200);
 		});
 	}
 };

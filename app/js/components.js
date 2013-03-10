@@ -51,8 +51,21 @@ Mast.registerComponent('Party', {
   autoRender: false,
   regions: {
     '.track-list': 'TrackList'
+  },
+  events : {
+    "click .similar" : 'similar'
+  },
+
+  similar : function(ev) {
+    ev.preventDefault();
+    $.getJSON(this.$('.similar').attr('href'), function(data) {
+      app.tracklist.fetchCollection({ partyId : $('.party').attr('data-partyon-partyid') });
+      _.each(data, function(track) {
+        app.playlist.add(track.trackUri);
+      });
+    });
   }
-})
+});
 
 Mast.registerCollection('Tracks', {
   url : '/track',
@@ -77,13 +90,9 @@ Mast.registerTree("TrackList", {
   init: function() {
     this.partyId = this.parent.model.id;
     this.fetchCollection({ partyId : this.partyId });
+    app.tracklist = this;
   },
   subscriptions: {
-    '~party/:id/update': function (id, attributes) {
-      if (id != this.partyId) return;
-      this.collection.reset();
-      this.collection.sort();
-    },
     '~track/create': function (track) {
       if (track.partyId != this.partyId) return;
       this.collection.add(track);
