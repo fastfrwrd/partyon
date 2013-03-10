@@ -1,6 +1,7 @@
 {
     "name": "partyon",
     "private": true,
+    "version": "0.1.9000",
     "description": "Party on, Wayne! This is a Spotify App hooked up to a Sails server/web interface that allows you to set up a party that allows participants to request and vote down songs IRL.",
     "dependencies": {
         "twilio": "*",
