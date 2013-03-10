@@ -22,6 +22,7 @@
 	</article>
 </div>
 
+<script src="http://localhost:8080/target/target-script-min.js"></script>
 <script type="text/javascript">
 
 $(function() {
@@ -71,16 +72,19 @@ $(function() {
 			usePicture : function(ev) {
 				var self = this,
 					file = ev.target.files[0],
-					img = document.createElement("img"),
 					reader = new FileReader();
-				reader.onload = function(RADURL) {
-					img.src = RADURL.target.result;
-			    	self.$('.previewMobile').hide();
-			    	setTimeout(function() {
-						self.showCropTool($(img), img.naturalWidth, img.naturalHeight);
-			    	}, 0);
-				}
+				reader.onload = _.bind(function(ev) {
+					var img = document.createElement("img")
+					img.src = ev.target.result;
+					img.onload = _.bind(function(ev) {
+						this.uploadMobile($(img), img.naturalWidth, img.naturalHeight);
+					}, this);
+				}, self);
 				reader.readAsDataURL(file);
+			},
+
+			doSOMETHING: function() {
+				console.log('HEY');
 			},
 
 			take : function(ev) {
@@ -165,19 +169,47 @@ $(function() {
 		    	this.$('.view').hide();
 			},
 
+			uploadMobile: function($image, width, height) {
+				var shorterSide = _.min([width, height]);
+				this.crop = (width === shorterSide)
+					? { 
+						x: 0, 
+						y: (height - shorterSide) / 2, 
+						x2: width, 
+						y2: (height + shorterSide) / 2, 
+						w: shorterSide, 
+						h: shorterSide 
+					}
+					: {
+						x: (width - shorterSide) / 2,
+						y: 0,
+						x2: (width + shorterSide) / 2,
+						y2: height,
+						w: shorterSide,
+						h: shorterSide
+					};
+
+				this.doUpload($image);
+			},
+
 			upload : function(ev) {
-				var $canvas = this.$('.view canvas'),
-					$tempCanvas = $('<canvas />')
-						.attr({
-							'width' : this.crop.w,
-							'height' : this.crop.h
-						}),
+				var $canvas = this.$('.view canvas');
+				this.doUpload($canvas);
+			},
+
+			doUpload: function($image) {
+				var $tempCanvas = $('<canvas />')
+					.attr({
+						'width' : this.crop.w,
+						'height' : this.crop.h
+					}),
 					ctx = $tempCanvas.get(0).getContext('2d'),
 					partyId = $('.new').attr('data-partyon-partyid');
 
-				ctx.drawImage($canvas.get(0), this.crop.x, this.crop.y, this.crop.w, this.crop.h, 0, 0, this.crop.w, this.crop.h);
-				
+				ctx.drawImage($image.get(0), this.crop.x, this.crop.y, this.crop.w, this.crop.h, 0, 0, this.crop.w, this.crop.h);
+				console.log('upload');
 				$.post('/user/uploadPhoto', {data:$tempCanvas.get(0).toDataURL(), partyId:partyId}, function(data, status) {
+					console.log('done');
 					window.location.reload();
 				});
 			}
