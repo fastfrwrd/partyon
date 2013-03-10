@@ -40,6 +40,25 @@ var PartyController = {
 
 			res.view('party/view', { party : party, user : req.session.user });
 		});
+	},
+
+	similar: function(req,res,next) {
+		if(!req.param('id') return res.view('404', 404);
+		Track.findAllByPartyId(req.param('id')).done(function(err, tracks) {
+			if(err) return res.view('500', 500);
+			if(!tracks) return res.view('404', 404);
+
+			var artists = [],
+				newTracks = (req.param('count')) ? req.param('count') : 20;
+
+			for(i=0; i < tracks.length && artists.length < parseInt(newTracks / 5, 10); i++) {
+				if(tracks[i].artist.indexOf(',') === -1 && !_.contains(artists, tracks[i].artist))
+					artists.push(tracks[i].artist);
+			}
+
+			console.log(artists);
+
+		});
 	}
 };
 module.exports = PartyController;

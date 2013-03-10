@@ -6,7 +6,9 @@
         "forever": "*",
         "sails": "0.8.89-1",
         "hulk-hogan": "*",
-        "underscore": "1.4.4"
+        "underscore": "1.4.4",
+        "echonest" : "*",
+        "twilio" : "*"
     },
     "scripts": {
         "start": "sudo .app.js"
