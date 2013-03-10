@@ -65,7 +65,10 @@ var PartyController = {
 			}
 
 			similar.get(artists, count, function(err, tracks) {
-				if(err) res.json({"message" : "Something went wrong."}, 302);
+				if(err) {
+					res.json({"message" : "Something went wrong."}, 302)
+					return;
+				}
 				var progress = 0;
 				_.each(tracks, function(t) {
 					t = _.extend(t, {
@@ -77,21 +80,13 @@ var PartyController = {
 
 					Track.create(t).done(function(err,track) {
 						progress++;
-						if(progress === count) {
-							// trigger refreshes
-							var request = http.request({
-								hostname: global.sails.config.host,
-								port: global.sails.config.port,
-								method: 'PUT',
-								path: '/track/'+track.id
-							});
-							request.end();
-						}
+						console.log(progress, count);
+						if(progress === count) res.json(tracks, 200);	
 					});
 				});
 			});
 
-			res.send({"message" : "working"}, 200);
+			// res.send({"message" : "working"}, 200);
 		});
 	}
 };

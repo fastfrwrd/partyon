@@ -1,8 +1,9 @@
 var echonest = require('echonest'),
+	http = require('http'),
 	Similar = {
-		nest : new echonest.Echonest({
-			api_key : global.sails.config.echonest.api_key
-		}),
+		// nest : new echonest.Echonest({
+		// 	api_key : global.sails.config.echonest.api_key
+		// }),
 
 		get : function(artists, count, cb) {
 			if(!artists) {
@@ -12,39 +13,51 @@ var echonest = require('echonest'),
 
 			var self = this;
 
-			self.nest.playlist.static({
-				artist : artists.join(','),
-				type : 'artist-radio',
-				bucket : ["id:spotify-WW","tracks"],
-				limit : true,
-				results : count,
-				dmca : true
-			}, function(err, nestRes) {
-				if(err || !nestRes) {
-					cb(self, true);
-					return;
-				}
-				console.log(nestRes);
-				if(nestRes.status.code === 5) { // the artist string sucked, recurse to a shorter one
-					return self.get(_.first(artists, artists.length - 1), count, cb);
-				}
+			var path = '/api/v4/playlist/static?';
+			path += 'api_key='+global.sails.config.echonest.api_key;
+			artists.forEach(function(el) {
+				path += '&artist='+encodeURIComponent(el);
+			})
+			path += '&format=json';
+			path += '&results='+count;
+			path += '&bucket=tracks';
+			path += '&bucket=id:spotify-WW';
+			path += '&limit=true';
+			path += '&type=artist';
+			path += '&dmca=true';
 
-				// we got a good result;
-				var songsToAdd = [];
+			var data = '';
 
-				_.each(nestRes.songs, function(s) {
-					var obj = {
-						trackUri : _.first(s.tracks).foreign_id.replace('spotify-WW','spotify'),
-						title : s.title,
-						artist : s.artist_name
-					};
+			var request = http.request({
+				hostname: 'developer.echonest.com',
+				port: '80',
+				method: 'GET',
+				path: path
+			}, function(res) {
+				res.on('data', function(chunk) {
+					data += chunk;
+				})
+				res.on('end', function() {
 
-					songsToAdd.push(obj);
-				});
+					data = JSON.parse(data);
 
-				cb(false, songsToAdd);
-				return Similar;
+					// we got a good result;
+					var songsToAdd = [];
+
+					_.each(data.response.songs, function(s) {
+						var obj = {
+							trackUri : _.first(s.tracks).foreign_id.replace('spotify-WW','spotify'),
+							title : s.title,
+							artist : s.artist_name
+						};
+
+						songsToAdd.push(obj);
+					});
+
+					cb(false, songsToAdd);
+				})
 			});
+			request.end();
 		}
 	};
 

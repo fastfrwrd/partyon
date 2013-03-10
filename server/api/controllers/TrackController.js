@@ -21,7 +21,8 @@ var TrackController = {
 					hostname: global.sails.config.host,
 					port: global.sails.config.port,
 					method: 'PUT',
-					path: '/track/'+track.id
+					path: '/track/'+track.id,
+					headers: { 'content-type': 'application/json' }
 				});
 				var body = { votes : ++track.votes };
 				request.write(JSON.stringify(body));
