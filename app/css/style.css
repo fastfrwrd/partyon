@@ -157,3 +157,7 @@ input[type="color"]:focus,
     .history li {
         background-color: #ECF0F1;
     }
+
+input[readonly].url-copy {
+    color: #666666;
+}

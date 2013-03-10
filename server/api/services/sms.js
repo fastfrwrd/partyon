@@ -1,4 +1,5 @@
-var twilio = require('twilio')('XXXXXXXXXX', 'XXXXXXXXXX'),
+var config = global.sails.config.twilio,
+    twilio = require('twilio')(config.account_id, config.token),
     from = 'XXXXXXXXXX';
 
 var sms = {

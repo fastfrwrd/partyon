@@ -17,5 +17,9 @@ module.exports = {
 		api_key       : 'XXXXXXXXXX',
 		consumer_key  : 'XXXXXXXXXX',
 		shared_secret : 'XXXXXXXXXX'
-	}
+	},
+    twilio : {
+        account_id : 'XXXXXXXXXX',
+        token      : 'XXXXXXXXXX'
+    }
 };
