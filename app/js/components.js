@@ -79,6 +79,11 @@ Mast.registerTree("TrackList", {
     this.fetchCollection({ partyId : this.partyId });
   },
   subscriptions: {
+    '~party/:id/update': function (id, attributes) {
+      if (id != this.partyId) return;
+      this.collection.reset();
+      this.collection.sort();
+    },
     '~track/create': function (track) {
       if (track.partyId != this.partyId) return;
       this.collection.add(track);
@@ -95,6 +100,10 @@ Mast.registerTree("TrackList", {
   startPlaying : function(track) {
     if(this.collection.size() === 1 && this.collection.first().get('trackUri') !== track.uri) {
       app.player.play(track.trackUri, app.playlist);
+      console.log(models);
+      app.playlist.observe(models.EVENT.CHANGE, function(ev) {
+        console.log(ev);
+      });
     }
   }
 });
