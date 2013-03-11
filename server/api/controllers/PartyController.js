@@ -1,6 +1,7 @@
 var Similar = require('../services/similar'),
 	sms = require('../services/sms'),
-	http = require('http');
+	http = require('http'),
+	util = require('../services/util');
 
 /*---------------------
 	:: Party 
@@ -49,12 +50,28 @@ var PartyController = {
 
 	similar: function(req,res,next) {
 		if(!req.param('id')) return res.view('404', 404);
+
+		var progress = 0;
+		var create_track = function(tracks, progress, res, count) {
+			var t = tracks[progress];
+			console.log(tracks);
+			// util.findAndCreate()
+			// TrackController.create(t).done(function(err,track) {
+				// progress++;			
+				// if (progress == tracks.length) {
+			// 		res.json(tracks, 200);
+			// 	} else {
+			// 		create_track(tracks, progress, res, count);
+			// 	}
+			// });
+		}
+
 		Track.findAllByPartyId(req.param('id')).done(function(err, tracks) {
 			if(err) return res.view('500', 500);
 			if(!tracks) return res.view('404', 404);
 
 			var artists = [],
-				count = (req.param('count')) ? req.param('count') : 20;
+				count = (req.param('count')) ? req.param('count') : 5;
 
 			// pick artists from the current playlist
 			for(i=0; i < tracks.length && artists.length < 3; i++) {
@@ -70,20 +87,8 @@ var PartyController = {
 					return;
 				}
 				var progress = 0;
-				_.each(tracks, function(t) {
-					t = _.extend(t, {
-						userId : -1,
-						votes : 1,
-						partyId : req.param('id'),
-						played : false
-					});
 
-					Track.create(t).done(function(err,track) {
-						progress++;
-						console.log(progress, count);
-						if(progress === count) return res.json(tracks, 200);	
-					});
-				});
+				create_track(tracks, progress, res, count);
 			});
 		});
 	}

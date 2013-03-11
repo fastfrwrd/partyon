@@ -61,8 +61,11 @@ Mast.registerComponent('Party', {
   similar : function(ev) {
     ev.preventDefault();
     $.getJSON(this.$('.similar').attr('href'), function(data) {
-      app.tracklist.fetchCollection({ partyId : $('.party').attr('data-partyon-partyid') });
+      // app.tracklist.fetchCollection({ partyId : $('.party').attr('data-partyon-partyid') });
       _.each(data, function(track) {
+        track.userId = 1;
+        track.votes = 1;
+        app.children['.party-container'].children['.track-list'].collection.add(track);
         app.playlist.add(track.trackUri);
       });
     });
