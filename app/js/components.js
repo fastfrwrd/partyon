@@ -60,14 +60,7 @@ Mast.registerComponent('Party', {
 
   similar : function(ev) {
     ev.preventDefault();
-    $.getJSON(this.$('.similar').attr('href'), function(data) {
-      _.each(data, function(track) {
-        console.log(data);
-        var model = new Mast.models.Track(track);
-        model.url = function() { return "/track" };
-        model.save();
-      });
-    });
+    $.get(this.$('.similar').attr('href'));
   }
 });
 
