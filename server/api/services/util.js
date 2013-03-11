@@ -1,28 +1,36 @@
 
-var config = global.sails.config;
+var request = require('request'),
+    config = global.sails.config;
 
-module.exports.findAndCreate = function(trackUri, partyId, cb) {
+module.exports.findAndUpdate = function(trackUri, partyId, cb) {
 
     Track.find({
         trackUri : trackUri,
         partyId : partyId
     }).done(function(err, track) {
+
         if (err) cb(err);
         if (track) {
 
-            var request = http.request({
-                hostname: config.host,
-                port: config.port,
-                method: 'PUT',
-                path: '/track/'+track.id,
-                headers: { 'content-type': 'application/json' }
+            request.post({
+                url: 'http://' + config.host + ':' + config.port + '/track/update/' + track.id + '?votes=' + (track.votes+1),
+                json: true
+            }, function() {
+                cb();
             });
-            var body = { votes : ++track.votes };
-            request.write(JSON.stringify(body));
-            request.end();
 
-            cb();
-
-        } else cb(false);
+        } else cb(true);
     })
+}
+
+module.exports.create = function(track, cb) {
+    console.log('create');
+    request.post({
+        url: 'http://' + config.host + ':' + config.port + '/track/create',
+        json: true,
+        body: JSON.stringify(track)
+    }, function(err, response, body) {
+        console.log(err, response, body);
+        cb(err, response, body);
+    });
 }
