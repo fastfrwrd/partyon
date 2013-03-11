@@ -4,7 +4,8 @@ module.exports = {
 	appName: "Party On! By Tucker Bickler and Paul Marbach",
 
 	// Port this Sails application will live on
-	port: 1337,
+	host: 'partyonwayne.co',
+	port: 80,
 
 	// The environment the app is deployed in 
 	// (`development` or `production`)
@@ -22,5 +23,11 @@ module.exports = {
 		api_key : "",
 		consumer_key : "",
 		shared_secret : ""
-	}
+	},
+	twilio : {
+        account_id : "",
+        token : "",
+        phone_no : "",
+        on : true
+    }
 };

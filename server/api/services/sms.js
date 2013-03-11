@@ -1,6 +1,7 @@
 var config = global.sails.config.twilio,
-    twilio = require('twilio')(config.account_id, config.token),
-    from = 'XXXXXXXXXX';
+    twilio = _.extend(require('twilio')(config.account_id, config.token), {
+        'phone_no' : config.phone_no
+    });
 
 var sms = {
 
@@ -10,15 +11,17 @@ var sms = {
         sms.host = number;
     },
     send: function(to, body, cb) {
-        twilio.sendSms({
-            to: to,
-            from: from,
-            body: body
-        }, cb);
+        if(config.on) {
+            twilio.sendSms({
+                to: to,
+                from: twilio.phone_no,
+                body: body
+            }, cb);
+        }
     },
     notifyHost: function(body, cb) {
         sms.send(sms.host, body, cb);
     }
-}
+};
 
 module.exports = sms;

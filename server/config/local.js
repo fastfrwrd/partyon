@@ -13,6 +13,9 @@
 // module.exports.modelDefaults = { database: 'foo', user: 'bar', password: 'baZ'}
 
 module.exports = {
+	host : "localhost",
+	port : 1337,
+
 	echonest : {
 		api_key       : 'XXXXXXXXXX',
 		consumer_key  : 'XXXXXXXXXX',
@@ -20,6 +23,8 @@ module.exports = {
 	},
     twilio : {
         account_id : 'XXXXXXXXXX',
-        token      : 'XXXXXXXXXX'
+        token      : 'XXXXXXXXXX',
+        phone_no   : 'XXXXXXXXXX',
+        on         : false
     }
 };
