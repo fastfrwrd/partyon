@@ -1,4 +1,3 @@
-module.require('underscore');
 var request = require('request'),
 	http = require('http');
 

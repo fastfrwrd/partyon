@@ -19,7 +19,7 @@ module.exports.adapters = {
 	disk: {
 		module: 'sails-dirty',
 		filePath: './.tmp/dirty.db',
-		inMemory: true
+		inMemory: false
 	},
 
 	// MySQL is the world's most popular relational database.

@@ -8,7 +8,7 @@
         "twilio": "*",
         "sails": "0.8.89-1",
         "underscore": "1.4.4",
-        "echonest": "*"
+        "request": "*"
     },
     "scripts": {
         "start": "sudo .app.js"

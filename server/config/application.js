@@ -4,7 +4,6 @@ module.exports = {
 	appName: "Party On! By Tucker Bickler and Paul Marbach",
 
 	// Port this Sails application will live on
-	host: 'partyonwayne.co',
 	port: 80,
 
 	// The environment the app is deployed in 

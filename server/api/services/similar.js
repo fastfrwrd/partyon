@@ -1,63 +1,49 @@
-var echonest = require('echonest'),
-	http = require('http'),
+var http = require('http'),
+	request = require('request'),
 	Similar = {
-		// nest : new echonest.Echonest({
-		// 	api_key : global.sails.config.echonest.api_key
-		// }),
-
 		get : function(artists, count, cb) {
-			if(!artists) {
-				cb(true);
-				return false;
-			}
+			console.log('requesting Echonest:', artists, count);
+			if(artists.length === 0) return cb(true);
 
 			var self = this;
 
-			var path = '/api/v4/playlist/static?';
-			path += 'api_key='+global.sails.config.echonest.api_key;
-			artists.forEach(function(el) {
-				path += '&artist='+encodeURIComponent(el);
-			})
-			path += '&format=json';
-			path += '&results='+count;
-			path += '&bucket=tracks';
-			path += '&bucket=id:spotify-WW';
-			path += '&limit=true';
-			path += '&type=artist';
-			path += '&dmca=true';
+			request.get(Similar.url(artists, count), function(err,response,json) {
+				if(err) cb(true);
+				else {
+					var data = JSON.parse(json);
+					if(data.response.status.code === 5) Similar.get(_.first(artists, artists.length - 1), count, cb);
+					else {
+						var songsToAdd = [];
 
-			var data = '';
+						_.each(data.response.songs, function(s) {
+							var obj = {
+								trackUri : _.first(s.tracks).foreign_id.replace('spotify-WW','spotify'),
+								title : s.title,
+								artist : s.artist_name
+							};
 
-			var request = http.request({
-				hostname: 'developer.echonest.com',
-				port: '80',
-				method: 'GET',
-				path: path
-			}, function(res) {
-				res.on('data', function(chunk) {
-					data += chunk;
-				})
-				res.on('end', function() {
+							songsToAdd.push(obj);
+						});
 
-					data = JSON.parse(data);
-
-					// we got a good result;
-					var songsToAdd = [];
-
-					_.each(data.response.songs, function(s) {
-						var obj = {
-							trackUri : _.first(s.tracks).foreign_id.replace('spotify-WW','spotify'),
-							title : s.title,
-							artist : s.artist_name
-						};
-
-						songsToAdd.push(obj);
-					});
-
-					cb(false, songsToAdd);
-				})
+						cb(false, songsToAdd);
+					}
+				}
 			});
-			request.end();
+		},
+
+		url : function(artists, count) {
+			var url = "http://developer.echonest.com/api/v4/playlist/static?";
+			url += 'api_key=' + global.sails.config.echonest.api_key;
+			_.each(artists, function(a) { url += '&artist='+encodeURIComponent(a); });
+			url += '&results=' + count;
+			url += '&bucket=tracks';
+			url += '&bucket=id:spotify-WW';
+			url += '&format=json';
+			url += '&limit=true';
+			url += '&type=artist';
+			url += '&dmca=true';
+
+			return url;
 		}
 	};
 

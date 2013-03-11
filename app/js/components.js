@@ -45,7 +45,7 @@ Mast.registerComponent('New', {
     var data = this.$form.serializeObject();
     app.createParty(data);
   }
-})
+});
 
 Mast.registerComponent('Party', {
   template: '.party',
@@ -61,9 +61,11 @@ Mast.registerComponent('Party', {
   similar : function(ev) {
     ev.preventDefault();
     $.getJSON(this.$('.similar').attr('href'), function(data) {
-      app.tracklist.fetchCollection({ partyId : $('.party').attr('data-partyon-partyid') });
       _.each(data, function(track) {
-        app.playlist.add(track.trackUri);
+        console.log(data);
+        var model = new Mast.models.Track(track);
+        model.url = function() { return "/track" };
+        model.save();
       });
     });
   }
