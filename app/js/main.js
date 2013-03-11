@@ -3,6 +3,5 @@ Mast.routes.index = function(query,page) {
 };
 
 Mast.raise({
-	baseurl : "http://partyonwayne.local:1337",
-	socket : false
+	baseurl : "http://partyonwayne.local:1337"
 });

@@ -3,11 +3,11 @@ var models = sp.require('$api/models');
 var views = sp.require('$api/views');
 
 Mast.registerModel('Party', {
-    urlRoot: 'http://partyonwayne.local:1337/party'
+    urlRoot: '/party'
 });
 
 Mast.registerModel('Track', {
-    urlRoot: 'http://partyonwayne.local:1337/track'
+    urlRoot: '/track'
 });
 
 Mast.registerComponent('New', {
@@ -70,7 +70,7 @@ Mast.registerComponent('Party', {
 });
 
 Mast.registerCollection('Tracks', {
-  url : 'http://partyonwayne.local:1337/track',
+  url : '/track',
   model : 'Track',
   autoFetch: false,
   comparator: function(track) {
@@ -134,7 +134,7 @@ Mast.registerComponent('App', {
         party.model = model;
         party.append();
         // setup user and song counts
-        party.$('.title .uri').val("http://partyonwayne.local:1337/p/" + party.$('.title .uri').val());
+        party.$('.title .uri').val(Mast.Socket.baseurl + "/p/" + party.$('.title .uri').val());
         app.player = new views.Player();
         app.playlist = new models.Playlist();
       }
