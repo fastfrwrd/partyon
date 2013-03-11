@@ -39,12 +39,12 @@
 			</h3>
 
 			<ul class="track-list list"></ul>
-			<a href="{{ Mast.Socket.baseurl }}/party/similar?id={{ id }}" class="btn btn-large similar">Add 20 songs like these</a>
+			<a href="http://partyonwayne.local:1337/party/similar?id={{ id }}" class="btn btn-large similar">Add 20 songs like these</a>
 		</article>
 
 		<div class="empty"></div>
 		<li class="party-track">
-			<span class="user"><img src="{{ Mast.Socket.baseurl }}/user/{{ userId }}/img.png"></span>
+			<span class="user"><img src="http://partyonwayne.local:1337/user/{{ userId }}/img.png"></span>
 			<a class="name" href="{{ trackUri }}">{{ title }}</a>
 			<span class="etc">- {{ artist }}</span>
 			<span class="pull-right">{{ votes }} <small>votes</small></span>

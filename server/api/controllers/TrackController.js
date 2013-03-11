@@ -1,5 +1,6 @@
 module.require('underscore');
-var http = require('http');
+var request = require('request'),
+	http = require('http');
 
 /*---------------------
 	:: Track 
@@ -35,6 +36,16 @@ var TrackController = {
 				// });
 
 			} else next();
+		});
+	},
+
+	suggest: function(req,res,next) {
+		var pageData = "";
+		request({
+			url: 'http://ws.spotify.com/search/1/track.json?q=' + req.param('q'),
+			json: true
+		}, function(err,response,body) {
+			res.send(body, response.statusCode);
 		});
 	}
 

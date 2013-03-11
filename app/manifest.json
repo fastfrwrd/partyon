@@ -20,7 +20,7 @@
 	  "api": "0.2.3",
 	  "util": "0.1.0",
 	  "resources": "0.2.2"
-  },
+    },
 	"RequiredInterface": 1,
 	"RequiredPermissions": [
 	    "http://api.twitter.com",
@@ -39,7 +39,7 @@
 	    "http://amsterdam.last.fm",
 	    "http://ws.audioscrobbler.com/",
 	    "http://developer.echonest.com",
-	    "http://partyonwayne.co",
+	    "http://partyonwayne.*",
 	    "http://localhost"
 	],
 	"SupportedLanguages": [

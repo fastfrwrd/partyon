@@ -79,12 +79,7 @@
 				track.set(attributes);
 				this.collection.sort();
 				this.render();
-			},
-			'~party/:id/update': function (id, attributes) {
-		      if (id != this.partyId) return;
-		      this.fetchCollection();
-		      this.collection.sort();
-		    },
+			}
 		}
 	});
 
@@ -96,7 +91,9 @@
 	    app.tracks = new Mast.components.PartyTracksList();
 	}
 
-	Mast.raise();
+	Mast.raise({
+		baseurl : "http://localhost:1337"
+	});
 
 	$(function() {
 		// put search-result into the template library
@@ -105,7 +102,7 @@
 		// autocomplete setup
 		$('.sp-search').autocomplete({
 			source: function(req, res) {
-				$.getJSON("http://ws.spotify.com/search/1/track.json?q=" + req.term, function(data) {
+				$.getJSON("/track/suggest?q=" + req.term, function(data) {
 					res(_.map(_.first(data.tracks, 5), function(track) { return track; }));
 				});
 			},

@@ -6,26 +6,26 @@ module.exports.adapters = {
 	// If you leave the adapter config unspecified 
 	// in a model definition, 'default' will be used.
 	'default': 'disk',
-	
+
 	// In-memory adapter for DEVELOPMENT ONLY
 	// (data is NOT preserved when the server shuts down)
 	memory: {
-		module: 'waterline-dirty',
+		module: 'sails-dirty',
 		inMemory: true
 	},
 
 	// Persistent adapter for DEVELOPMENT ONLY
 	// (data IS preserved when the server shuts down)
 	disk: {
-		module: 'waterline-dirty',
+		module: 'sails-dirty',
 		filePath: './.tmp/dirty.db',
-		inMemory: false
+		inMemory: true
 	},
 
 	// MySQL is the world's most popular relational database.
 	// Learn more: http://en.wikipedia.org/wiki/MySQL
 	mysql: {
-		module		: 'waterline-mysql',
+		module		: 'sails-mysql',
 		host		: 'YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS',
 		user		: 'YOUR_MYSQL_USER',
 		password	: 'YOUR_MYSQL_PASSWORD',
