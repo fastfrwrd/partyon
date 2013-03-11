@@ -1,7 +1,8 @@
 var Similar = require('../services/similar'),
 	sms = require('../services/sms'),
 	http = require('http'),
-	util = require('../services/util');
+	util = require('../services/util'),
+	_ = require('underscore');
 
 /*---------------------
 	:: Party 
@@ -51,28 +52,58 @@ var PartyController = {
 	similar: function(req,res,next) {
 		if(!req.param('id')) return res.view('404', 404);
 
-		var progress = 0;
-		var create_track = function(tracks, progress, res, count) {
+		var partyId = req.param('id');
+
+		var create_track = function(tracks, progress) {
+			console.log('create_track', progress);
+
+			if (progress >= tracks.length) return;
+
 			var t = tracks[progress];
-			console.log(tracks);
-			// util.findAndCreate()
-			// TrackController.create(t).done(function(err,track) {
-				// progress++;			
-				// if (progress == tracks.length) {
-			// 		res.json(tracks, 200);
-			// 	} else {
-			// 		create_track(tracks, progress, res, count);
-			// 	}
-			// });
+			progress += 1;
+
+			setTimeout(function() {
+
+				Track.find({
+					trackUri : t.trackUri,
+					partyId : partyId
+				}).done(function(err, track) {
+
+					// publish a new track
+					if (err || !track) {
+
+						req.params = _.extend(req.params, {
+							entity: 'track',
+							action: 'create',
+							partyId: partyId
+						}, t);
+						sails.models.track.create(req);
+
+					// otherwise update it's votes
+					} else {
+
+						t.votes += 1;
+						req.params = _.extend(req.params, {
+							entity: 'track',
+							action: 'update',
+							partyId: partyId
+						}, t);
+						sails.models.track.update(req);
+					}
+				})
+
+				// create_track(tracks, progress);
+
+			}, 100);
 		}
 
-		Track.findAllByPartyId(req.param('id')).done(function(err, tracks) {
+		Track.findAllByPartyId(partyId).done(function(err, tracks) {
 			if(err) return res.view('500', 500);
 			if(!tracks) return res.view('404', 404);
 			console.log(tracks);
 
 			var artists = [],
-				count = (req.param('count')) ? req.param('count') : 5;
+				count = (req.param('count')) ? req.param('count') : 20;
 
 			// pick artists from the current playlist
 			for(i=0; i < tracks.length && artists.length < 3; i++) {
@@ -84,15 +115,13 @@ var PartyController = {
 			}
 
 			similar.get(artists, count, function(err, tracks) {
-				if(err) {
-					res.json({"message" : "Something went wrong."}, 302)
-					return;
-				}
-				var progress = 0;
-
-				create_track(tracks, progress, res, count);
+				if(err) return res.json({"message" : "Something went wrong."}, 302);
+				create_track(tracks, 0, count);
 			});
 		});
+
+		// need to call this or Mast will keep requesting
+		// res.send(200);
 	}
 };
 module.exports = PartyController;

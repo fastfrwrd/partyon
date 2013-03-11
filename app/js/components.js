@@ -98,7 +98,7 @@ Mast.registerTree("TrackList", {
     },
     '~track/:id/update': function (id, attributes) {
       var track = this.collection.get(id);
-      newTrack.set(attributes);
+      track.set(attributes);
       this.collection.sort();
       this.render();
     }

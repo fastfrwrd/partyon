@@ -1,5 +1,4 @@
 var request = require('request'),
-	http = require('http'),
 	util = require('../services/util');
 
 /*---------------------
@@ -10,8 +9,7 @@ var TrackController = {
 
 	// To trigger this action locally, visit: `http://localhost:port/track/create`
 	create: function (req,res,next) {
-
-		util.findAndCreate( req.param('trackUri'), req.param('partyId'), function(err) {
+		util.findAndUpdate( req.param('trackUri'), req.param('partyId'), function(err) {
 			if (err) next()
 		});
 	},

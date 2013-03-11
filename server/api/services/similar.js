@@ -1,4 +1,4 @@
-var http = require('http'),
+var echonest = require('echonest'), 
 	request = require('request'),
 	Similar = {
 		get : function(artists, count, cb) {
