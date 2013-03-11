@@ -1,5 +1,5 @@
 var Similar = require('../services/similar'),
-	sms = require('../services/sms.js'),
+	sms = require('../services/sms'),
 	http = require('http');
 
 /*---------------------
@@ -18,7 +18,7 @@ var PartyController = {
 			if(name && name.length) {
 				uri = name.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
 			} else {
-				//else we make it "p<ID>" and 
+				//else we make it "p<ID>"
 				uri = "p" + id;
 				name = "Fabulous Party";
 			}
