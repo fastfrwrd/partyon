@@ -1,6 +1,6 @@
 <article class="queue" id="party_<%= party.id %>" data-partyon-partyid="<%= party.id %>" data-partyon-userid="<%= user.id %>">
 	<h3 class="title"><%= party.name %>
-		<small class="details"><%= party.tracks.length %> tracks &bull; <%=: party.users.length %> guests</small>
+		<small class="details"><%= party.track_count %> tracks &bull; <%=: party.user_count %> guests</small>
 	</h3>
 	<form class="search">
 		<input type="text" class="sp-search input-xlarge" autocorrect="off" autocapitalize="off">

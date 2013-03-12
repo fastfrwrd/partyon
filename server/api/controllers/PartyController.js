@@ -42,8 +42,12 @@ var PartyController = {
 			if(err) return res.view('500', 500);
 			if(!party) return res.view('404', 404);
 
-			User.findAllByPartyId(party.id).done(function(err,users) { party.users = users; });
-			Track.findAllByPartyId(party.id).done(function(err,tracks) { party.tracks = tracks; });
+			User.findAllByPartyId(party.id).done(function(err,users) { party.user_count = users.length; });
+			Track.findAllByPartyId(party.id).done(function(err,tracks) { party.track_count = tracks.length; });
+
+			// Use this once countBy* is fixed
+			// User.countByPartyId(party.id).done(function(err,len) { party.user_count = len; });
+			// Track.countByPartyId(party.id).done(function(err,len) { party.track_count = len; });
 
 			res.view('party/view', { party : party, user : req.session.user });
 		});
@@ -69,11 +73,12 @@ var PartyController = {
 				// publish a new track
 				if (err || !track) {
 
-					// give it some required values
+					// give it some required values because default values are not supported yet
 					t = _.extend(t, {
 						partyId: partyId,
 						userId: 0,
-						votes: 0
+						votes: 0,
+						played: false
 					});
 
 					// create the track in the db
