@@ -13,6 +13,8 @@
 // module.exports.modelDefaults = { database: 'foo', user: 'bar', password: 'baZ'}
 
 module.exports = {
+	environment: 'development',
+	host : 'localhost',
 	port : 1337,
 
 	echonest : {
