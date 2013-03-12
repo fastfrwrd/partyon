@@ -40,6 +40,7 @@
 	    "http://ws.audioscrobbler.com/",
 	    "http://developer.echonest.com",
 	    "http://partyonwayne.co",
+	    "http://partyonwayne.local",
 	    "http://localhost"
 	],
 	"SupportedLanguages": [

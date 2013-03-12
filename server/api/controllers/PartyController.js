@@ -134,7 +134,6 @@ var PartyController = {
 			// pick artists from the current playlist
 			for(i=0; i < tracks.length && artists.length < 3; i++) {
 				var r = Math.floor(tracks.length * Math.random());
-				console.log(r,tracks[r]);
 
 				if(tracks[r].artist.indexOf(',') === -1 && !_.contains(artists, tracks[r].artist))
 					artists.push(tracks[r].artist);
