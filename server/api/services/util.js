@@ -2,6 +2,7 @@
 var request = require('request'),
     config = global.sails.config;
 
+// refactor to not do url request
 module.exports.findAndUpdate = function(trackUri, partyId, cb) {
 
     Track.find({
@@ -21,16 +22,4 @@ module.exports.findAndUpdate = function(trackUri, partyId, cb) {
 
         } else cb(true);
     })
-}
-
-module.exports.create = function(track, cb) {
-    console.log('create');
-    request.post({
-        url: 'http://' + config.host + ':' + config.port + '/track/create',
-        json: true,
-        body: JSON.stringify(track)
-    }, function(err, response, body) {
-        console.log(err, response, body);
-        cb(err, response, body);
-    });
 }

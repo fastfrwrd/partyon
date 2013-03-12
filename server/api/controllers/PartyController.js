@@ -1,7 +1,6 @@
 var Similar = require('../services/similar'),
 	sms = require('../services/sms'),
 	http = require('http'),
-	util = require('../services/util'),
 	_ = require('underscore');
 
 /*---------------------

@@ -9,6 +9,8 @@ var TrackController = {
 
 	// To trigger this action locally, visit: `http://localhost:port/track/create`
 	create: function (req,res,next) {
+
+		// refactor to not do a url request
 		util.findAndUpdate( req.param('trackUri'), req.param('partyId'), function(err) {
 			if (err) next()
 		});
