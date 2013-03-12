@@ -55,46 +55,67 @@ var PartyController = {
 		var partyId = req.param('id');
 
 		var create_track = function(tracks, progress) {
-			console.log('create_track', progress);
 
 			if (progress >= tracks.length) return;
 
 			var t = tracks[progress];
 			progress += 1;
 
-			setTimeout(function() {
+			Track.find({
+				trackUri : t.trackUri,
+				partyId : partyId
+			}).done(function(err, track) {
 
-				Track.find({
-					trackUri : t.trackUri,
-					partyId : partyId
-				}).done(function(err, track) {
+				// publish a new track
+				if (err || !track) {
 
-					// publish a new track
-					if (err || !track) {
+					// give it some required values
+					t = _.extend(t, {
+						partyId: partyId,
+						userId: 0,
+						votes: 0
+					});
 
-						req.params = _.extend(req.params, {
-							entity: 'track',
-							action: 'create',
-							partyId: partyId
-						}, t);
-						sails.models.track.create(req);
+					// create the track in the db
+					Track.create(t).done(function(err, model) {
 
-					// otherwise update it's votes
-					} else {
+						// publish it to
+						Track.publish(req, null, {
+							uri: Track.identity + '/create',
+							data: model.values,
+						});
 
-						t.votes += 1;
-						req.params = _.extend(req.params, {
-							entity: 'track',
-							action: 'update',
-							partyId: partyId
-						}, t);
-						sails.models.track.update(req);
-					}
-				})
+						// send off to find another track
+						setTimeout(function() {
+							create_track(tracks, progress);
+						}, 1000);
 
-				// create_track(tracks, progress);
+					})
 
-			}, 100);
+				// otherwise ignore
+				}
+
+				// or update votes
+				/*else {
+
+					Track.update(track.id, {
+						votes: track.votes + 1
+					}, function(err, model) {
+
+						Track.publish(req, {
+							id: model.id
+						}, {
+							uri: Track.identity + '/' + model.id + '/update',
+							data: model.values
+						});
+
+						// send off to find another track
+						setTimeout(function() {
+							create_track(tracks, progress);
+						}, 1000);
+					})
+				}*/
+			})
 		}
 
 		Track.findAllByPartyId(partyId).done(function(err, tracks) {
@@ -121,7 +142,7 @@ var PartyController = {
 		});
 
 		// need to call this or Mast will keep requesting
-		// res.send(200);
+		res.send(200);
 	}
 };
 module.exports = PartyController;
