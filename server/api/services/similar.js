@@ -1,5 +1,4 @@
-var echonest = require('echonest'), 
-	request = require('request'),
+var	request = require('request'),
 	Similar = {
 		get : function(artists, count, cb) {
 			console.log('requesting Echonest:', artists, count);

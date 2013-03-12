@@ -39,12 +39,12 @@
 			</h3>
 
 			<ul class="track-list list"></ul>
-			<a href="{{ Mast.Socket.baseurl }}/party/similar?id={{ id }}" class="btn btn-large similar">Add more songs like these</a>
+			<a href="http://partyonwayne.local:1337/party/similar?id={{ id }}" class="btn btn-large similar">Add more songs like these</a>
 		</article>
 
 		<div class="empty"></div>
 		<li class="party-track">
-			<span class="user"><img src="{{ Mast.Socket.baseurl }}/user/{{ userId }}/img.png"></span>
+			<span class="user"><img src="http://partyonwayne.local:1337/user/{{ userId }}/img.png"></span>
 			<a class="name" href="{{ trackUri }}">{{ title }}</a>
 			<span class="etc">- {{ artist }}</span>
 			<span class="pull-right">{{ votes }} <small>votes</small></span>
@@ -63,11 +63,11 @@
 					<li class="control-group">
 						<label class="control-label" for="inputTitle">Title</label>
 						<div class="controls">
-							<input type="text" name="name" class="input-xlarge" id="inputTitle"></input>
+							<input type="text" name="name" class="input-xxlarge" id="inputTitle"></input>
 						</div>
 					</li>
 					<li class="form-actions">
-            			<button type="submit" class="btn btn-primary" id="submitNew">Let's Party!&nbsp;<i class="icon icon-globe icon-white"></i></button>
+            <button type="submit" class="btn palette-amethyst" id="submitNew">Let's Party!&nbsp;<i class="icon icon-globe icon-white"></i></button>
 					</li>
 				</ul>
 			</form>
