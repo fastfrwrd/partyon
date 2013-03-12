@@ -1,23 +1,17 @@
 {
     "name": "partyon",
     "private": true,
-    "version": "0.1.9000",
+    "version": "0.1.0",
     "description": "Party on, Wayne! This is a Spotify App hooked up to a Sails server/web interface that allows you to set up a party that allows participants to request and vote down songs IRL.",
     "dependencies": {
+        "sails": "*",
         "twilio": "*",
         "request": "*"
-    },
-    "scripts": {
-        "preinstall" : "npm install -g sails forever",
-        "start": "forever start .app.js"
     },
     "main": ".app.js",
     "repository": {
         "type": "git",
         "url": "git://github.com/fastfrwrd/partyon.git"
-    },
-    "engines": {
-        "node": "0.8.x"
     },
     "author": "Tucker Bickler and Paul Marbach",
     "license": "MIT"

@@ -39,7 +39,7 @@
 	    "http://amsterdam.last.fm",
 	    "http://ws.audioscrobbler.com/",
 	    "http://developer.echonest.com",
-	    "http://partyonwayne.*",
+	    "http://partyonwayne.co",
 	    "http://localhost"
 	],
 	"SupportedLanguages": [

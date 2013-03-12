@@ -67,7 +67,7 @@ var PartyController = {
 			}
 
 			similar.get(artists, count, function(err, simTracks) {
-				if(err) return res.json({"message" : "Something went wrong."}, 302);
+				if(err) return res.json({"message" : "Something went wrong."}, 403);
 				else {
 					_.each(simTracks, function(t) {
 						_.extend(t, {

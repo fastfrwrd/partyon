@@ -24,206 +24,208 @@
 
 <script type="text/javascript">
 
-$(function() {
-	var partyId = $('article.new').attr('data-partyon-partyid'),
-		userId = $('article.new').attr('data-partyon-userid'),
-		userPartyId = $('article.new').attr('data-partyon-userpartyid');
+(function($) {
+	$(function() {
+		var partyId = $('article.new').attr('data-partyon-partyid'),
+			userId = $('article.new').attr('data-partyon-userid'),
+			userPartyId = $('article.new').attr('data-partyon-userpartyid');
 
-	if(userId) {
-		$('.go').click(function(ev) {
-			ev.preventDefault();
-			$.post('/user/switchParty/' + partyId, function(status) {
-				window.location.reload();
-			});
-		});
-
-		$('.back').click(function(ev) {
-			ev.preventDefault();
-			$.getJSON('/party/' + userPartyId, function(data) {
-				window.location = '/p/' + data.uri;
-			});
-		});
-	} else {
-		Mast.registerComponent('snapshot', {
-			template : '.snapshot',
-			outlet: '#snapshot',
-			events : {
-				'click .take' : 'take',
-				'click .upload' : 'upload',
-				'click .retake' : 'afterRender',
-				'click .take-picture' : 'triggerCamera',
-				'change .camera' : 'usePicture'
-			},
-
-			afterRender : function() {
-				Mast.isMobile ? this.setupMobile() : this.setupDesktop()
-			},
-
-			setupMobile : function(ev) {
-				this.$('.view').hide();
-				this.$('.previewMobile').show();
-			},
-
-			triggerCamera : function(ev) {
-				this.$('.camera').trigger('click');
-			},
-
-			usePicture : function(ev) {
-				var self = this,
-					file = ev.target.files[0],
-					reader = new FileReader();
-				reader.onload = _.bind(function(ev) {
-					var img = document.createElement("img")
-					img.src = ev.target.result;
-					img.onload = _.bind(function(ev) {
-						this.uploadMobile($(img), img.naturalWidth, img.naturalHeight);
-					}, this);
-				}, self);
-				reader.readAsDataURL(file);
-			},
-
-			doSOMETHING: function() {
-				console.log('HEY');
-			},
-
-			take : function(ev) {
-				var $video = this.$('.preview video')
-		    	this.showCropTool($video, $video.width(), $video.height());
-			},
-
-			showCropTool : function($image, width, height) {
-
-				var self = this;
-				var $canvas = this.$('.view canvas'),
-		    		ctx = $canvas.get(0).getContext('2d');
-
-		    	$canvas.attr({
-		    		'height': height,
-		    		'width': width
-		    	});
-		    	ctx.drawImage($image.get(0), 0, 0, width, height);
-		    	var shorterSide = _.min([width, height]);
-
-		    	this.crop = (width === shorterSide)
-					? { 
-						x: 0, 
-						y: (height - shorterSide) / 2, 
-						x2: width, 
-						y2: (height + shorterSide) / 2, 
-						w: shorterSide, 
-						h: shorterSide 
-					}
-					: {
-						x: (width - shorterSide) / 2,
-						y: 0,
-						x2: (width + shorterSide) / 2,
-						y2: height,
-						w: shorterSide,
-						h: shorterSide
-					};
-
-		    	this.$('.preview').hide();
-		    	this.$('.view').show();
-		   		
-		   		$canvas.parent().css({
-		   			'height' : $canvas.height(),
-		   			'width' : $canvas.width()
-		   		}).Jcrop({
-		   			allowResize: false,
-		   			allowMove: true,
-		   			aspectRatio: 1,
-		   			setSelect: [this.crop.x,this.crop.y,this.crop.x2,this.crop.y2],
-		   			bgColor: 'transparent',
-		   			onSelect: function(crop) {
-		   				self.crop = crop;
-		   			}
-		   		});
-			},
-
-			setupDesktop : function(ev) {
-				navigator.enabled = true;
-				navigator.getMedia = ( navigator.getUserMedia ||
-	                         navigator.webkitGetUserMedia ||
-	                         //navigator.mozGetUserMedia ||
-	                         navigator.msGetUserMedia);
-
-				if(navigator.getMedia) {
-					navigator.getMedia({
-						'video' : true
-					}, function(stream) {
-						var video = this.$('.preview video').get(0);
-						if (navigator.mozGetUserMedia) video.mozSrcObject = stream;
-						else {
-							var vendorURL = window.URL || window.webkitURL;
-							video.src = vendorURL.createObjectURL(stream);
-						}
-						this.$('.preview').show();
-						video.play();
-					}, function(err) { console.log("error", err); });
-				} else {
-					// photo upload
-					this.$('.upload').show();
-				}
-
-		    	this.$('.view').hide();
-			},
-
-			uploadMobile: function($image, width, height) {
-				var shorterSide = _.min([width, height]);
-				this.crop = (width === shorterSide)
-					? { 
-						x: 0, 
-						y: (height - shorterSide) / 2, 
-						x2: width, 
-						y2: (height + shorterSide) / 2, 
-						w: shorterSide, 
-						h: shorterSide 
-					}
-					: {
-						x: (width - shorterSide) / 2,
-						y: 0,
-						x2: (width + shorterSide) / 2,
-						y2: height,
-						w: shorterSide,
-						h: shorterSide
-					};
-
-				this.doUpload($image);
-			},
-
-			upload : function(ev) {
-				var $canvas = this.$('.view canvas');
-				this.doUpload($canvas);
-			},
-
-			doUpload: function($image) {
-				var $tempCanvas = $('<canvas />')
-					.attr({
-						'width' : this.crop.w,
-						'height' : this.crop.h
-					}),
-					ctx = $tempCanvas.get(0).getContext('2d'),
-					partyId = $('.new').attr('data-partyon-partyid');
-
-				ctx.drawImage($image.get(0), this.crop.x, this.crop.y, this.crop.w, this.crop.h, 0, 0, this.crop.w, this.crop.h);
-				console.log('upload');
-				$.post('/user/uploadPhoto', {data:$tempCanvas.get(0).toDataURL(), partyId:partyId}, function(data, status) {
-					console.log('done');
+		if(userId) {
+			$('.go').click(function(ev) {
+				ev.preventDefault();
+				$.post('/user/switchParty/' + partyId, function(status) {
 					window.location.reload();
 				});
-			}
-		});
+			});
+
+			$('.back').click(function(ev) {
+				ev.preventDefault();
+				$.getJSON('/party/' + userPartyId, function(data) {
+					window.location = '/p/' + data.uri;
+				});
+			});
+		} else {
+			Mast.registerComponent('snapshot', {
+				template : '.snapshot',
+				outlet: '#snapshot',
+				events : {
+					'click .take' : 'take',
+					'click .upload' : 'upload',
+					'click .retake' : 'afterRender',
+					'click .take-picture' : 'triggerCamera',
+					'change .camera' : 'usePicture'
+				},
+
+				afterRender : function() {
+					Mast.isMobile ? this.setupMobile() : this.setupDesktop()
+				},
+
+				setupMobile : function(ev) {
+					this.$('.view').hide();
+					this.$('.previewMobile').show();
+				},
+
+				triggerCamera : function(ev) {
+					this.$('.camera').trigger('click');
+				},
+
+				usePicture : function(ev) {
+					var self = this,
+						file = ev.target.files[0],
+						reader = new FileReader();
+					reader.onload = _.bind(function(ev) {
+						var img = document.createElement("img")
+						img.src = ev.target.result;
+						img.onload = _.bind(function(ev) {
+							this.uploadMobile($(img), img.naturalWidth, img.naturalHeight);
+						}, this);
+					}, self);
+					reader.readAsDataURL(file);
+				},
+
+				doSOMETHING: function() {
+					console.log('HEY');
+				},
+
+				take : function(ev) {
+					var $video = this.$('.preview video')
+			    	this.showCropTool($video, $video.width(), $video.height());
+				},
+
+				showCropTool : function($image, width, height) {
+
+					var self = this;
+					var $canvas = this.$('.view canvas'),
+			    		ctx = $canvas.get(0).getContext('2d');
+
+			    	$canvas.attr({
+			    		'height': height,
+			    		'width': width
+			    	});
+			    	ctx.drawImage($image.get(0), 0, 0, width, height);
+			    	var shorterSide = _.min([width, height]);
+
+			    	this.crop = (width === shorterSide)
+						? { 
+							x: 0, 
+							y: (height - shorterSide) / 2, 
+							x2: width, 
+							y2: (height + shorterSide) / 2, 
+							w: shorterSide, 
+							h: shorterSide 
+						}
+						: {
+							x: (width - shorterSide) / 2,
+							y: 0,
+							x2: (width + shorterSide) / 2,
+							y2: height,
+							w: shorterSide,
+							h: shorterSide
+						};
+
+			    	this.$('.preview').hide();
+			    	this.$('.view').show();
+			   		
+			   		$canvas.parent().css({
+			   			'height' : $canvas.height(),
+			   			'width' : $canvas.width()
+			   		}).Jcrop({
+			   			allowResize: false,
+			   			allowMove: true,
+			   			aspectRatio: 1,
+			   			setSelect: [this.crop.x,this.crop.y,this.crop.x2,this.crop.y2],
+			   			bgColor: 'transparent',
+			   			onSelect: function(crop) {
+			   				self.crop = crop;
+			   			}
+			   		});
+				},
+
+				setupDesktop : function(ev) {
+					navigator.enabled = true;
+					navigator.getMedia = ( navigator.getUserMedia ||
+		                         navigator.webkitGetUserMedia ||
+		                         //navigator.mozGetUserMedia ||
+		                         navigator.msGetUserMedia);
+
+					if(navigator.getMedia) {
+						navigator.getMedia({
+							'video' : true
+						}, function(stream) {
+							var video = this.$('.preview video').get(0);
+							if (navigator.mozGetUserMedia) video.mozSrcObject = stream;
+							else {
+								var vendorURL = window.URL || window.webkitURL;
+								video.src = vendorURL.createObjectURL(stream);
+							}
+							this.$('.preview').show();
+							video.play();
+						}, function(err) { console.log("error", err); });
+					} else {
+						// photo upload
+						this.$('.upload').show();
+					}
+
+			    	this.$('.view').hide();
+				},
+
+				uploadMobile: function($image, width, height) {
+					var shorterSide = _.min([width, height]);
+					this.crop = (width === shorterSide)
+						? { 
+							x: 0, 
+							y: (height - shorterSide) / 2, 
+							x2: width, 
+							y2: (height + shorterSide) / 2, 
+							w: shorterSide, 
+							h: shorterSide 
+						}
+						: {
+							x: (width - shorterSide) / 2,
+							y: 0,
+							x2: (width + shorterSide) / 2,
+							y2: height,
+							w: shorterSide,
+							h: shorterSide
+						};
+
+					this.doUpload($image);
+				},
+
+				upload : function(ev) {
+					var $canvas = this.$('.view canvas');
+					this.doUpload($canvas);
+				},
+
+				doUpload: function($image) {
+					var $tempCanvas = $('<canvas />')
+						.attr({
+							'width' : this.crop.w,
+							'height' : this.crop.h
+						}),
+						ctx = $tempCanvas.get(0).getContext('2d'),
+						partyId = $('.new').attr('data-partyon-partyid');
+
+					ctx.drawImage($image.get(0), this.crop.x, this.crop.y, this.crop.w, this.crop.h, 0, 0, this.crop.w, this.crop.h);
+					console.log('upload');
+					$.post('/user/uploadPhoto', {data:$tempCanvas.get(0).toDataURL(), partyId:partyId}, function(data, status) {
+						console.log('done');
+						window.location.reload();
+					});
+				}
+			});
+			
+			var app = {};
+
+			Mast.routes.index = function(query, page) {
+				app.snapshot = new Mast.components.snapshot();
+			}		
+		}
 		
-		var app = {};
+		Mast.raise({
+			socket: false
+		});
 
-		Mast.routes.index = function(query, page) {
-			app.snapshot = new Mast.components.snapshot();
-		}		
-	}
-	
-	Mast.raise({
-		socket: false
 	});
-
-});
+})($);
 </script>
