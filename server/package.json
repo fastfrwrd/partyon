@@ -4,14 +4,12 @@
     "version": "0.1.9000",
     "description": "Party on, Wayne! This is a Spotify App hooked up to a Sails server/web interface that allows you to set up a party that allows participants to request and vote down songs IRL.",
     "dependencies": {
-        "echonest": "*",
         "twilio": "*",
-        "sails": "0.8.89-1",
-        "underscore": "1.4.4",
         "request": "*"
     },
     "scripts": {
-        "start": "sudo .app.js"
+        "preinstall" : "npm install -g sails forever",
+        "start": "forever start .app.js"
     },
     "main": ".app.js",
     "repository": {

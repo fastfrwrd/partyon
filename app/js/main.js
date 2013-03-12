@@ -3,5 +3,5 @@ Mast.routes.index = function(query,page) {
 };
 
 Mast.raise({
-	baseurl : "http://partyonwayne.local:1337"
+	baseurl : "http://partyonwayne.co"
 });
