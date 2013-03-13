@@ -3,7 +3,6 @@
 	-> model
 ---------------------*/
 module.exports = {
-
 	attributes: {
 		uri: "STRING",
 		name: "STRING"

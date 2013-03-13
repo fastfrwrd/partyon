@@ -16,14 +16,14 @@ module.exports = {
 	},
 	// inclue your own in server/config/local.js
 	echonest : {
-		api_key : "",
-		consumer_key : "",
+		api_key       : "",
+		consumer_key  : "",
 		shared_secret : ""
 	},
 	twilio : {
         account_id : "",
-        token : "",
-        phone_no : "",
-        on : true
+        token      : "",
+        phone_no   : "",
+        on         : true
     }
 };
