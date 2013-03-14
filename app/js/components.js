@@ -57,7 +57,6 @@ Mast.registerComponent('Party', {
   events : {
     "click .similar" : 'similar'
   },
-
   similar : function(ev) {
     ev.preventDefault();
     $.get(this.$('.similar').attr('href'));
@@ -135,4 +134,11 @@ Mast.registerComponent('App', {
       }
     });
   }
-})
+});
+
+models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
+  Mast.Socket.request('/track/lookup', {
+    spotify: spotify.links,
+    partyId: app.children['.party-container'].model.id
+  }, function(){}, 'GET');
+});

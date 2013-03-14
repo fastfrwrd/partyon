@@ -1,6 +1,7 @@
 var Similar = require('../services/similar'),
 	sms = require('../services/sms'),
 	http = require('http'),
+	util = require('../services/util'),
 	_ = require('underscore');
 
 /*---------------------
@@ -55,77 +56,11 @@ var PartyController = {
 	similar: function(req,res,next) {
 		if(!req.param('id')) return res.view('404', 404);
 
-		var partyId = req.param('id');
-
-		var create_track = function(tracks, progress) {
-
-			if (progress >= tracks.length) return;
-
-			var t = tracks[progress];
-			progress += 1;
-
-			Track.find({
-				trackUri : t.trackUri,
-				partyId : partyId
-			}).done(function(err, track) {
-
-				// publish a new track
-				if (err || !track) {
-
-					// give it some required values because default values are not supported yet
-					t = _.extend(t, {
-						partyId: partyId,
-						userId: 0,
-						votes: 0,
-						played: false
-					});
-
-					// create the track in the db
-					Track.create(t).done(function(err, model) {
-
-						// publish it to
-						Track.publish(req, null, {
-							uri: Track.identity + '/create',
-							data: model.values,
-						});
-
-						// send off to find another track
-						setTimeout(function() {
-							create_track(tracks, progress);
-						}, 1000);
-
-					})
-
-				// otherwise ignore
-				}
-
-				// or update votes
-				/*else {
-
-					Track.update(track.id, {
-						votes: track.votes + 1
-					}, function(err, model) {
-
-						Track.publish(req, {
-							id: model.id
-						}, {
-							uri: Track.identity + '/' + model.id + '/update',
-							data: model.values
-						});
-
-						// send off to find another track
-						setTimeout(function() {
-							create_track(tracks, progress);
-						}, 1000);
-					})
-				}*/
-			})
-		}
+		var partyId = parseInt(req.param('id'));
 
 		Track.findAllByPartyId(partyId).done(function(err, tracks) {
 			if(err) return res.view('500', 500);
 			if(!tracks) return res.view('404', 404);
-			console.log(tracks);
 
 			var artists = [],
 				count = (req.param('count')) ? req.param('count') : 20;
@@ -140,7 +75,13 @@ var PartyController = {
 
 			similar.get(artists, count, function(err, tracks) {
 				if(err) return res.json({"message" : "Something went wrong."}, 302);
-				create_track(tracks, 0, count);
+
+				tracks = _.map(tracks, function(track) {
+					track.partyId = partyId;
+					return track;
+				})
+
+				util.createTracks(req, tracks, 1000);
 			});
 		});
 

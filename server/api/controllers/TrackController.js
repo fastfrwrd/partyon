@@ -1,6 +1,7 @@
 var request = require('request'),
 	util = require('../services/util');
 
+
 /*---------------------
 	:: Track 
 	-> controller
@@ -24,6 +25,26 @@ var TrackController = {
 		}, function(err,response,body) {
 			res.send(body, response.statusCode);
 		});
+	},
+
+	lookup: function(req,res,next) {
+		var links = req.param('spotify'),
+			partyId = req.param('partyId');
+
+		util.doLookups(links, function(tracks) {
+
+			tracks = _.map(tracks, function(track) {
+				return {
+					trackUri: track.track.href,
+					partyId: partyId,
+					artist: _.pluck(track.track.artists, 'name').join(', '),
+					title: track.track.name
+				}
+			})
+
+			util.createTracks(req, tracks, 1000);
+
+		})
 	}
 
 };
