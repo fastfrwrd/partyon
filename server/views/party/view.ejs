@@ -100,33 +100,30 @@
 		Mast.TemplateLibrary['.search-result'] = $('.search-result').outerHTML().replace('%7B%7B', '{{').replace('%7D%7D', '}}');;
 
 		// autocomplete setup
-		$('.sp-search').autocomplete({
-			source: function(req, res) {
-				$.getJSON("/track/suggest?q=" + req.term, function(data) {
-					res(_.map(_.first(data.tracks, 5), function(track) { return track; }));
-				});
-			},
-			select: function(ev, ui) {
-				var model = new Mast.models.Track({
-					trackUri : ui.item.href,
-					title : ui.item.name,
-					artist : _.pluck(ui.item.artists, 'name').join(', '),
-					partyId : partyId,
-					votes : 1,
-					userId : userId
-				});
-				model.url = function() { return "/track" };
-				model.save();
-			},
-			search: function(ev, ui) {
-				ev.preventDefault();
-				return false;
-			}
-		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-			return $('<li />')
-				.append(_.template(Mast.TemplateLibrary['.search-result'], item))
-				.appendTo(ul);
-		};
+		$('.sp-search')
+			.autocomplete({
+				source: function(req, res) {
+					$.getJSON("/track/suggest?q=" + req.term, function(data) {
+						res(_.map(_.first(data.tracks, 5), function(track) { return track; }));
+					});
+				},
+				select: function(ev, ui) {
+					var model = new Mast.models.Track({
+						trackUri : ui.item.href,
+						title : ui.item.name,
+						artist : _.pluck(ui.item.artists, 'name').join(', '),
+						partyId : partyId,
+						votes : 1,
+						userId : userId
+					});
+					model.url = function() { return "/track" };
+					model.save();
+				}
+			}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+				return $('<li />')
+					.append(_.template(Mast.TemplateLibrary['.search-result'], item))
+					.appendTo(ul);
+			};
 	});
 })($);
 </script>

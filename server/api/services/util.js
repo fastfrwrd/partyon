@@ -2,27 +2,36 @@
 var request = require('request'),
     config = global.sails.config;
 
-// refactor to not do url request
-module.exports.findAndUpdate = function(trackUri, partyId, cb) {
+
+var upvoteTrack = function(req, track, cb) {
+
+    Track.update(track.id, {
+        votes: track.votes + 1
+    }, function(err, model) {
+
+        Track.publish(req, {
+            id: model.id
+        }, {
+            uri: Track.identity + '/' + model.id + '/update',
+            data: model.values
+        });
+
+        cb && cb();
+    })
+}
+module.exports.upvoteTrack = upvoteTrack;
+
+
+var trackExists = function(trackUri, partyId, cb) {
 
     Track.find({
         trackUri : trackUri,
         partyId : partyId
     }).done(function(err, track) {
-
-        if (err) cb(err);
-        if (track) {
-
-            request.post({
-                url: 'http://' + config.host + ':' + config.port + '/track/update/' + track.id + '?votes=' + (track.votes+1),
-                json: true
-            }, function() {
-                cb();
-            });
-
-        } else cb(true);
-    })
+        cb(track);
+    });
 }
+module.exports.trackExists = trackExists;
 
 
 var createTracks = function(req, tracks, delay, include_duplicates, idx) {
@@ -54,7 +63,7 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
 
             // create the track in the db
             Track.create(t).done(function(err, model) {
-                
+
                 // publish it to
                 Track.publish(req, null, {
                     uri: Track.identity + '/create',
@@ -71,26 +80,16 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
         // otherwise vote up if include_duplicates
         } else if (include_duplicates) {
 
-            Track.update(track.id, {
-                votes: track.votes + 1
-            }, function(err, model) {
-
-                Track.publish(req, {
-                    id: model.id
-                }, {
-                    uri: Track.identity + '/' + model.id + '/update',
-                    data: model.values
-                });
-
-                // send off to find another track
+            upvoteTrack(track, function() {
                 setTimeout(function() {
                     createTracks(req, tracks, delay, true, idx);
                 }, delay);
-            })
+            });
         }
     })
 }
 module.exports.createTracks = createTracks;
+
 
 // we lookup one by one like this so we aren't bombarding servers
 //   with multiple requests at the same time.

@@ -10,11 +10,16 @@ var TrackController = {
 
 	// To trigger this action locally, visit: `http://localhost:port/track/create`
 	create: function (req,res,next) {
+		var trackUri = req.param('trackUri'),
+			partyId = req.param('partyId');
 
-		// refactor to not do a url request
-		util.findAndUpdate( req.param('trackUri'), req.param('partyId'), function(err) {
-			if (err) next()
-		});
+		util.trackExists( trackUri, partyId, function(model) {
+			if (model) {
+				util.upvoteTrack(model);
+			} else {
+				next();
+			}
+		})
 	},
 
 	suggest: function(req,res,next) {
