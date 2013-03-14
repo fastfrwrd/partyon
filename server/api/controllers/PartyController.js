@@ -32,6 +32,8 @@ var PartyController = {
 
 			req.params.uri = uri;
 			req.params.name = name;
+			req.params.track_count = 0;
+			req.params.user_count = 0;
 			next();
 		});
 	},
@@ -41,13 +43,6 @@ var PartyController = {
 		Party.findByUri(req.param('uri')).done(function(err, party) {
 			if(err) return res.view('500', 500);
 			if(!party) return res.view('404', 404);
-
-			User.findAllByPartyId(party.id).done(function(err,users) { party.user_count = users.length; });
-			Track.findAllByPartyId(party.id).done(function(err,tracks) { party.track_count = tracks.length; });
-
-			// Use this once countBy* is fixed
-			// User.countByPartyId(party.id).done(function(err,len) { party.user_count = len; });
-			// Track.countByPartyId(party.id).done(function(err,len) { party.track_count = len; });
 
 			res.view('party/view', { party : party, user : req.session.user });
 		});

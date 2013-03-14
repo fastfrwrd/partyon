@@ -32,8 +32,9 @@
 		<article class="party" data-partyon-partyid="{{id}}">
 			<h3 class="title">
 				{{ name }}
-				<span class="pull-right">
-					<input type="text" class="url-copy input-small uri" readonly="readonly" value="{{ uri }}"></input>
+				<small class="details"><span class="track-count">{{ track_count }}</span> tracks &bull; <span class="user-count">{{ user_count }}</span> guests</small>
+				<span class="pull-right uri">
+					<input type="text" class="url-copy input-small" readonly="readonly" value="{{ uri }}"></input>
 				</span>
 				<div class="clearfix"></div>
 			</h3>

@@ -5,7 +5,9 @@
 module.exports = {
 	attributes: {
 		uri: "STRING",
-		name: "STRING"
+		name: "STRING",
+        track_count: "INTEGER",
+        user_count: "INTEGER"
 	}
 
 };

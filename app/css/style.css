@@ -144,7 +144,7 @@ input[type="color"]:focus,
         background-color: #E74C3C;
     }
 
-    .party .uri  {
+    .party .uri input {
         min-width: 250px;
     }
 
@@ -158,6 +158,9 @@ input[type="color"]:focus,
         background-color: #ECF0F1;
     }
 
-input[readonly].url-copy {
+.uri input {
     color: #666666;
+}
+.track-count, .user-count {
+    color: inherit;
 }

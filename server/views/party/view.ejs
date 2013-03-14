@@ -87,8 +87,22 @@
 		template : '.party-track'
 	});
 
+	Mast.registerComponent('Party', {
+		outlet: '.container',
+		template: '.queue',
+		regions: {
+			'#queue-list': 'PartyTracksList'
+		},
+		subscriptions: {
+			'~party/:id/update': function (id, attributes) {
+				console.log('update');
+				console.log(arguments);
+			}
+		}
+	})
+
 	Mast.routes.index = function(query,page) {
-	    app.tracks = new Mast.components.PartyTracksList();
+	    app.party = new Mast.components.Party();
 	}
 
 	Mast.raise({

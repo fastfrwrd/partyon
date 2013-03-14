@@ -64,7 +64,7 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
             // create the track in the db
             Track.create(t).done(function(err, model) {
 
-                // publish it to
+                // publish it to rooms
                 Track.publish(req, null, {
                     uri: Track.identity + '/create',
                     data: model.values,

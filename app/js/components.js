@@ -60,6 +60,13 @@ Mast.registerComponent('Party', {
   similar : function(ev) {
     ev.preventDefault();
     $.get(this.$('.similar').attr('href'));
+  },
+  subscriptions: {
+    '~party/:id/update': function (id, attributes) {
+      this.$el.find('.user-count').text(attributes.user_count);
+      this.$el.find('.track-count').text(attributes.track_count);
+      this.set(attributes, { render: false, silent: true });
+    }
   }
 });
 
@@ -128,7 +135,8 @@ Mast.registerComponent('App', {
         party.model = model;
         party.append();
         // setup user and song counts
-        party.$('.title .uri').val(Mast.Socket.baseurl + "/p/" + party.$('.title .uri').val());
+        $input = party.$('.title .uri input');
+        $input.val(Mast.Socket.baseurl + "/p/" + $input.val());
         app.player = new views.Player();
         app.playlist = new models.Playlist();
       }
