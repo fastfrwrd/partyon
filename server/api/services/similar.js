@@ -35,6 +35,7 @@ var	request = require('request'),
 			url += 'api_key=' + global.sails.config.echonest.api_key;
 			_.each(artists, function(a) { url += '&artist='+encodeURIComponent(a); });
 			url += '&results=' + count;
+			url += '&distribution=wandering';
 			url += '&bucket=tracks';
 			url += '&bucket=id:spotify-WW';
 			url += '&format=json';

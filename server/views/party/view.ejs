@@ -118,8 +118,9 @@
 				model.url = function() { return "/track" };
 				model.save();
 			},
-			search: function() {
-
+			search: function(ev, ui) {
+				ev.preventDefault();
+				return false;
 			}
 		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 			return $('<li />')
