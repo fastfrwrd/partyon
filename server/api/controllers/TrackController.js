@@ -15,7 +15,7 @@ var TrackController = {
 
 		util.trackExists( trackUri, partyId, function(model) {
 			if (model) {
-				util.upvoteTrack(model);
+				util.upvoteTrack(req, model);
 			} else {
 				next();
 			}

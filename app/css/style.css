@@ -4,6 +4,9 @@ html {
 ul {
     list-style: none;
 }
+ul.panes {
+    margin: 0;
+}
 
 article {
     border-radius: 8px;
@@ -112,6 +115,9 @@ input[type="color"]:focus,
     margin-top: 3px;
 }
 
+.loading {
+    background-color: #999999;
+}
 
 .new {
     background-color: #8E44AD;
@@ -161,6 +167,6 @@ input[type="color"]:focus,
 .uri input {
     color: #666666;
 }
-.track-count, .user-count {
+.party-name, .track-count, .user-count {
     color: inherit;
 }

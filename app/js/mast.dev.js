@@ -6736,7 +6736,7 @@ Mast.Pattern = {
         //     self.trigger('change',!parameters.render,parameters.changes);
         // });
         this.model && this.model.on('change',function(model,options){
-            self.trigger('change',model,options);
+            self.trigger('change',options?!options.render:null,model.changedAttributes());
         });
         
         // Initialize init method if specified
@@ -6783,7 +6783,7 @@ Mast.Pattern = {
     // Return templated HTML for this pattern
     generate: function (data) {
         data = this._normalizeData(data);
-        // console.log("* Pattern rendering:",this._template,data);
+        //console.log("* Pattern rendering:",this._template,data);
         return ((_.template(this._template))(data));
     },
         
@@ -7876,4 +7876,3 @@ Mast.register = function (entityName,definition) {
         },definition)
     });
 };
-

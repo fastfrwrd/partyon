@@ -80,7 +80,7 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
         // otherwise vote up if include_duplicates
         } else if (include_duplicates) {
 
-            upvoteTrack(track, function() {
+            upvoteTrack(req, track, function() {
                 setTimeout(function() {
                     createTracks(req, tracks, delay, true, idx);
                 }, delay);
@@ -90,7 +90,8 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
 }
 module.exports.createTracks = createTracks;
 
-
+// !! not sure if we need this anymore
+//
 // we lookup one by one like this so we aren't bombarding servers
 //   with multiple requests at the same time.
 var doLookups = function(links, cb, idx, res) {

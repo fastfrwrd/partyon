@@ -1,3 +1,13 @@
+html {
+    text-shadow: none;
+}
+ul {
+    list-style: none;
+}
+ul.panes {
+    margin: 0;
+}
+
 section[role="content"] {
     padding-bottom: 5em;
 }
@@ -109,6 +119,10 @@ input[type="color"]:focus,
     margin-top: 3px;
 }
 
+.loading {
+    background-color: #999999;
+}
+
 
 .new {
     background-color: #8E44AD;
@@ -137,27 +151,27 @@ input[type="color"]:focus,
             background-color: #8E44AD;
         }
 
-.queue {
+.party {
     background-color: #C0392B;
 }
 
-    .queue .title {
+    .party .title {
         background-color: #E74C3C;
     }
 
-    .queue .search {
+    .party .search {
         margin-bottom: 0;
         padding-bottom: 0;
     }
 
-    .queue .party-track {
+    .party .party-track {
     }
 
-    .queue .party-track .vote {
+    .party .party-track .vote {
         margin-left: 10px;
     }
 
-        .queue .party-track .vote i {
+        .party .party-track .vote i {
             margin-top: 3px;
         }
 

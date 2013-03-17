@@ -20,9 +20,10 @@
 				<h1>Party On!</h1>
 
 				<ul class="panes">
+					<li class="loading-container"></li>
 					<li class="new-container"></li>
 					<li class="party-container"></li>
-				</div>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -31,8 +32,8 @@
 
 		<article class="party" data-partyon-partyid="{{id}}">
 			<h3 class="title">
-				{{ name }}
-				<small class="details"><span class="track-count">{{ track_count }}</span> tracks &bull; <span class="user-count">{{ user_count }}</span> guests</small>
+				<span class="party-name">{{ name }}</span>
+				<small class="details"><span class="track-count">0</span> tracks &bull; <span class="user-count">{{ user_count }}</span> guests</small>
 				<span class="pull-right uri">
 					<input type="text" class="url-copy input-small" readonly="readonly" value="{{ uri }}"></input>
 				</span>
@@ -74,6 +75,10 @@
 			</form>
 		</article>
 
+		<article class="loading">
+			<h3 class="title">Connecting..</h3>
+		</article>
+
 		<article class="history">
 			<h3 class="title">Party History</h3>
 			<ul class="list">
@@ -92,6 +97,5 @@
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 	<script type="text/javascript" src="js/util.js"></script>
 	<script type="text/javascript" src="js/components.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
