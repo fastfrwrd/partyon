@@ -56,7 +56,7 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
 
             // give it some required values because default values are not supported yet
             t = _.extend(t, {
-                userId: 0,
+                userId: 'g',
                 votes: 0,
                 played: false
             });

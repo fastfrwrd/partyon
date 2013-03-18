@@ -183,16 +183,18 @@ models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
     var href = links[idx];
     models.Track.fromURI(href, function(track) {
       track = track.data;
-      var model = new Mast.models.Track({
-                                  trackUri : track.uri,
-                                  title : track.name,
-                                  artist : _.pluck(track.artists, 'name').join(', '),
-                                  partyId : app.party.get('id'),
-                                  votes : 1,
-                                  played: false,
-                                  userId : 0
-                              });
-      model.save();
+      if (track.availableForPlayback) {
+        var model = new Mast.models.Track({
+                                    trackUri : track.uri,
+                                    title : track.name,
+                                    artist : _.pluck(track.artists, 'name').join(', '),
+                                    partyId : app.party.get('id'),
+                                    votes : 1,
+                                    played: false,
+                                    userId : 'w'
+                                });
+        model.save();
+      }
       setTimeout(function() {
         idx += 1;
         next_link(links, idx);  
@@ -210,4 +212,6 @@ Mast.routes.index = function(query,page) {
     window.app = new Mast.components.App();
 };
 
+Mast.raise({
+  baseurl : "http://partyonwayne.local:1337"
 });

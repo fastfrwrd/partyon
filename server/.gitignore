@@ -41,3 +41,7 @@ nbproject
 # PartyOn
 #######################
 public/img/upload/*
+
+# keep wayne and garth
+!public/img/upload/w.png
+!public/img/upload/g.png

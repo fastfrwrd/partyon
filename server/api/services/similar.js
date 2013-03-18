@@ -30,6 +30,7 @@ var	request = require('request'),
 			});
 		},
 
+		// #TODO only retrieve songs playabe in the US
 		url : function(artists, count) {
 			var url = "http://developer.echonest.com/api/v4/playlist/static?";
 			url += 'api_key=' + global.sails.config.echonest.api_key;
@@ -37,7 +38,7 @@ var	request = require('request'),
 			url += '&results=' + count;
 			url += '&distribution=wandering';
 			url += '&bucket=tracks';
-			url += '&bucket=id:spotify-WW';
+			url += '&bucket=id:spotify-WW'; // ideally we would just do "spotify-US", etc
 			url += '&format=json';
 			url += '&limit=true';
 			url += '&type=artist';
