@@ -65,6 +65,7 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
             Track.create(t).done(function(err, model) {
 
                 // publish it to rooms
+                Track.subscribe(req, model);
                 Track.publish(req, null, {
                     uri: Track.identity + '/create',
                     data: model.values,
@@ -72,19 +73,22 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
 
                 // send off to find another track
                 setTimeout(function() {
-                    createTracks(req, tracks, delay, false, idx);
+                    createTracks(req, tracks, delay, include_duplicates, idx);
                 }, delay);
 
             })
 
         // otherwise vote up if include_duplicates
         } else if (include_duplicates) {
-
             upvoteTrack(req, track, function() {
                 setTimeout(function() {
-                    createTracks(req, tracks, delay, true, idx);
+                    createTracks(req, tracks, delay, include_duplicates, idx);
                 }, delay);
             });
+        } else {
+            setTimeout(function() {
+                createTracks(req, tracks, delay, include_duplicates, idx);
+            }, delay);
         }
     })
 }

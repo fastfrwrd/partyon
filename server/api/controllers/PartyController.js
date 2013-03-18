@@ -74,7 +74,7 @@ var PartyController = {
 				tracks = _.map(tracks, function(track) {
 					track.partyId = partyId;
 					return track;
-				})
+				});
 
 				util.createTracks(req, tracks, 1000);
 			});

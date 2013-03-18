@@ -118,7 +118,7 @@ Mast.registerComponent('Party', {
   },
   similar : function(ev) {
     ev.preventDefault();
-    $.get(this.$('.similar').attr('href'));
+    Mast.Socket.request('/party/similar', { id: this.model.id }, function(){});
   },
   subscriptions: {
     '~party/:id/update': function (id, attributes) {
@@ -160,6 +160,7 @@ Mast.registerComponent('App', {
       success: function(attrs) {
         // in order to subscribe to party changes, we need
         //   to fetch it from the server. idky.
+        // FIGURED IT OUT: got to subscribe manually on the server
         Mast.Socket.find(new Mast.models.Party(), {
             data: { id: attrs.id },
             success: app.startParty
