@@ -115,9 +115,11 @@ jQuery(function($) {
             this.$('.sp-search')
                 .autocomplete({
                     source: function(req, res) {
-                        $.getJSON("/track/suggest?q=" + req.term, function(data) {
+                        Mast.Socket.request('/track/suggest', {
+                            q: req.term
+                        }, function(data) {
                             res(_.map(_.first(data.tracks, 5), function(track) { return track; }));
-                        });
+                        }, 'GET');
                     },
                     select: function(ev, ui) {
                         var model = new Mast.models.Track({

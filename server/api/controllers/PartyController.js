@@ -30,6 +30,7 @@ var PartyController = {
 			sms.setHost(req.params.phone);
 			sms.send(req.params.phone, 'Scha-wing! http://partyonwayne.co/p/'+uri);
 
+            Party.subscribe(req, { id: id });
 			req.params.uri = uri;
 			req.params.name = name;
 			req.params.track_count = 0;

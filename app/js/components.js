@@ -157,15 +157,7 @@ Mast.registerComponent('App', {
   createParty: function(data) {
     var party = new Mast.models.Party(data);
     party.save(null, {
-      success: function(attrs) {
-        // in order to subscribe to party changes, we need
-        //   to fetch it from the server. idky.
-        // FIGURED IT OUT: got to subscribe manually on the server
-        Mast.Socket.find(new Mast.models.Party(), {
-            data: { id: attrs.id },
-            success: app.startParty
-        });
-      }
+      success: app.startParty
     });
   },
   startParty: function(attrs) {
@@ -185,16 +177,15 @@ models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
     models.Track.fromURI(href, function(track) {
       track = track.data;
       if (track.availableForPlayback) {
-        var model = new Mast.models.Track({
-                                    trackUri : track.uri,
-                                    title : track.name,
-                                    artist : _.pluck(track.artists, 'name').join(', '),
-                                    partyId : app.party.get('id'),
-                                    votes : 1,
-                                    played: false,
-                                    userId : 'w'
-                                });
-        model.save();
+        Mast.Socket.request('/track/create', {
+            trackUri : track.uri,
+            title : track.name,
+            artist : _.pluck(track.artists, 'name').join(', '),
+            partyId : app.party.get('id'),
+            votes : 1,
+            played: false,
+            userId : 'w'
+        }, function(){}, 'PUT')
       }
       setTimeout(function() {
         idx += 1;
