@@ -8,7 +8,6 @@
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" type="text/css" href="css/flat-ui.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -41,12 +40,13 @@
 			</h3>
 
 			<ul class="track-list list"></ul>
-			<a href="http://partyonwayne.co/party/similar?id={{ id }}" class="btn btn-large similar">Add more songs like these</a>
+			<a href="#" class="btn btn-large similar">Add more songs like these</a>
 		</article>
 
 		<div class="empty"></div>
+
 		<li class="party-track">
-			<span class="user"><img src="http://partyonwayne.co/user/{{ userId }}/img.png"></span>
+			<span class="user" data-user-id="{{userId}}"></span>
 			<a class="name" href="{{ trackUri }}">{{ title }}</a>
 			<span class="etc">- {{ artist }}</span>
 			<span class="pull-right">{{ votes }} <small>votes</small></span>
@@ -87,9 +87,7 @@
 				<li><span class="name">State Band Trip</span><span class="etc">- 9 songs</span><time class="pull-right">October 11, 2011</time></li>
 			</ul>
 		</article>
-
 	</div>
-
 
 	<!-- Scripts -->
 	<script type="text/javascript" src="js/mast.dev.js"></script>
