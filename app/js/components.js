@@ -207,10 +207,3 @@ models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
 Mast.routes.index = function(query,page) {
     window.app = new Mast.components.App();
 };
-
-var url = "http://partyonwayne.local:8080/";
-
-// HTTP request to get cookiezzzzz
-$.get(url, function() {});
-// now we can talk to socket
-Mast.raise({ baseurl: url });
