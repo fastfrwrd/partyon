@@ -20,5 +20,10 @@
 
 		<!-- Templates from your view path are included here -->
 		<%- assets.templateLibrary() %>
+		<script type="text/javascript">
+			Mast.raise({
+		        baseurl : "<%- global.sails.config.baseUrl %>"
+		    });
+		</script>
 	</body>
 </html>

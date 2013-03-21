@@ -4,7 +4,7 @@
     "version": "0.1.0",
     "description": "Party on, Wayne! This is a Spotify App hooked up to a Sails server/web interface that allows you to set up a party that allows participants to request and vote down songs IRL.",
     "dependencies": {
-        "sails": "0.8.89-1",
+        "sails": "0.8.895",
         "twilio": "*",
         "request": "*",
         "underscore":"*",

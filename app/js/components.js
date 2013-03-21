@@ -72,7 +72,7 @@ Mast.registerComponent('TrackListItem', {
   render: function() {
     this.__super__.render.call(this);
     // append image without making Spotify and Sockets poop themselves
-    var imgUrl =  Mast.Socket.baseurl + "/user/" + this.$('.user').attr('data-user-id') + ".png";
+    var imgUrl =  Mast.Socket.baseurl + "user/" + this.$('.user').attr('data-user-id') + ".png";
     this.$('.user').append($('<img />').attr('src', imgUrl));
     return this;
   }
@@ -144,7 +144,7 @@ Mast.registerComponent('Party', {
      this.$user_count = this.$('.user-count' );
     this.$track_count = this.$('.track-count');
     var $input = this.$('.title .uri input');
-    $input.val(Mast.Socket.baseurl + "/p/" + $input.val());
+    $input.val(Mast.Socket.baseurl + "p/" + $input.val());
   }
 });
 
@@ -208,6 +208,9 @@ Mast.routes.index = function(query,page) {
     window.app = new Mast.components.App();
 };
 
-Mast.raise({
-  baseurl: "http://partyonwayne.co/"
-});
+var url = "http://partyonwayne.local:8080/";
+
+// HTTP request to get cookiezzzzz
+$.get(url, function() {});
+// now we can talk to socket
+Mast.raise({ baseurl: url });
