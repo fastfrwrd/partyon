@@ -5,5 +5,8 @@
 	<span class="pull-right vote-block hide">
 		<button class="vote btn btn-success pull-right"><i class="icon-white icon-plus-sign"></i></button>
 	</span>
-	<span class="pull-right vote-count hide">{{votes}} <small>votes</small></span>
+	<span class="pull-right">
+        <button class="btn btn-small vote" data-vote="+1">+</button><button class="btn btn-small vote" data-vote="-1">-</button>
+        <span class="vote-count">{{votes}}</span> <small>votes</small>
+    </span>
 </li>

@@ -7,7 +7,14 @@ jQuery(function($) {
     });
 
     Mast.registerComponent('TrackListItem', {
-        template : '.party-track'
+        template : '.party-track',
+        afterRender: function() {
+            this.$vote_count = this.$('.vote-count');
+        },
+        bindings: {
+            'votes' : function(newValue) { this.$vote_count.text(newValue) },
+            'updatedAt' : $.noop
+        }
     });
 
     Mast.registerModel('Track', {
@@ -18,13 +25,9 @@ jQuery(function($) {
             title: "",
             userId: 0,
             trackUri: "",
-            artists: "",
             votes: 0,
             partyId: app.party_id,
-            played: false,
-            users : function() {
-                return this.get('userId').split(',');
-            }
+            played: false
         }
     });
 
@@ -35,17 +38,10 @@ jQuery(function($) {
         comparator: function(track) {
             return -track.get('votes');
         },
-        events : {
-            'click .vote' : 'vote'
-        },
         init: function() {
             this.listenTo(this, 'reset', this.onChange);
             this.listenTo(this, 'add', this.onChange);
             this.listenTo(this, 'remove', this.onChange);
-        },
-        vote : function(ev) {
-            ev.preventDefault();
-            // voting magic
         },
         onChange: function() {
             app.party.$track_count.text(this.length);
@@ -60,6 +56,9 @@ jQuery(function($) {
         emptyHTML: "<li>No tracks yet for this party.</li>",
         loadingHTML: "<li>Loading...</li>",
         errorHTML: "<li>There was an error retrieving tracks. Bummer, dude.</li>",
+        events : {
+            // 'click .vote' : 'vote' // no workie
+        },
         init: function() {
             this.fetchCollection({ 
                 partyId : app.party_id,
@@ -75,9 +74,30 @@ jQuery(function($) {
                 var track = this.collection.get(id);
                 if (track.get('partyId') != app.party_id) return;
                 track.set(attributes);
-                this.collection.sort();
+                this.collection.sort(); // shouldn't have to call this. re-renders tree.
                 this.render();
             }
+        },
+        afterRender: function() {
+            var self = this;
+            this.$branchOutlet.on('click', '.vote', function(ev) {
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+                self.vote(ev)
+            })
+        },
+        vote : function(ev) {
+            var $btn = $(ev.target),
+                vote = parseInt($btn.data('vote')),
+                track_id = $btn.closest('.party-track').data('trackid'),
+                track = this.collection.get(track_id);
+
+            //! this doesn't work
+            // track.save();
+
+            //! so we do it this way
+            var data = { votes: track.get('votes') + vote };
+            Mast.Socket.request('/track/update/'+track_id, data, $.noop, 'PUT');
         }
     });
 
@@ -99,7 +119,7 @@ jQuery(function($) {
         bindings: {
             // You need bindings to each changed attribute or else Mast will
             // re-render the entire component. re: updatedAt
-              'updatedAt' : function() {},
+              'updatedAt' : $.noop,
                    'name' : function(newValue) { this.$name.text(newValue) },
              'user_count' : function(newValue) { this.$user_count.text(newValue) }
         },

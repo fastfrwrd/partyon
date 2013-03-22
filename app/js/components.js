@@ -103,7 +103,7 @@ Mast.registerTree("TrackList", {
     '~track/:id/update': function (id, attributes) {
       var track = this.collection.get(id);
       track.set(attributes);
-      this.collection.sort();
+      this.collection.sort(); // shouldn't have to call this. re-renders tree.
       // app.playlist.tracks.sort(function(t1, t2) {
       //   t1 = app.tracklist.collection.getOne('trackUri', t1.data.uri);
       //   t2 = app.tracklist.collection.getOne('trackUri', t2.data.uri);
@@ -133,21 +133,24 @@ Mast.registerComponent('Party', {
   },
   similar : function(ev) {
     ev.preventDefault();
-    Mast.Socket.request('/party/similar', { id: this.model.id }, function(){});
+    Mast.Socket.request('/party/similar', { id: this.model.id }, $.noop);
   },
   subscriptions: {
     '~party/:id/update': function (id, attributes) {
-      this.set(attributes);
+      this.set(this.model.changedAttributes(attributes));
     }
   },
   bindings: {
     // You need bindings to each changed attribute or else Mast will
     // re-render the entire component. re: updatedAt
-      'updatedAt' : function(){},
+      'updatedAt' : $.noop,
            'name' : function(newValue) { this.$name.text(newValue) },
      'user_count' : function(newValue) { this.$user_count.text(newValue) }
   },
   afterRender: function() {
+    // this is called when setting attributes, but we only want it called once after init
+    if (this.rendered) return;
+    this.rendered = true;
            this.$name = this.$('.party-name' );
      this.$user_count = this.$('.user-count' );
     this.$track_count = this.$('.track-count');
@@ -192,7 +195,7 @@ models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
     userId: 'w',
     partyId: app.party.get('id'),
     links: spotify.links
-  }, function(){});
+  }, $.noop);
 });
 
 Mast.routes.index = function(query,page) {
