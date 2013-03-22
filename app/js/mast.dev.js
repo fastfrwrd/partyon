@@ -6731,8 +6731,8 @@ Mast.Pattern = {
     this.model = Mast.mixins.provisionInstance(this.model,Mast.models,Mast.Model);
     
     // Listen for changes in model and bubble them up
-    this.model && this.model.on('change',function(model,parameters){
-      self.trigger('change',!parameters.render,parameters.changes);
+    this.model && this.model.on('change',function(model,options){
+      self.trigger('change',options?!options.render:null,model.changedAttributes());
     });
     
     // Initialize init method if specified

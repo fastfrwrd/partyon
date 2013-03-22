@@ -74,7 +74,6 @@ jQuery(function($) {
             '~track/:id/update': function (id, attributes) {
                 var track = this.collection.get(id);
                 if (track.get('partyId') != app.party_id) return;
-
                 track.set(attributes);
                 this.collection.sort();
                 this.render();

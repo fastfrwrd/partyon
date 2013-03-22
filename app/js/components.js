@@ -62,6 +62,11 @@ Mast.registerCollection('Tracks', {
     this.listenTo(this, 'add', this.onChange);
     this.listenTo(this, 'remove', this.onChange);
   },
+  getOne: function(attr, val) {
+    return this.find(function(track) {
+      return track.get(attr) === val;
+    });
+  },
   onChange: function() {
     app.party.$track_count.text(this.length);
   }
@@ -72,7 +77,7 @@ Mast.registerComponent('TrackListItem', {
   afterRender: function() {
     // append image without making Spotify and Sockets poop themselves
     var imgUrl =  Mast.Socket.baseurl + "user/" + this.$('.user').attr('data-user-id') + ".png";
-    this.$('.user').append($('<img />', { 'src', imgUrl }));
+    this.$('.user').append($('<img />', { 'src': imgUrl }));
   }
 });
 
@@ -99,6 +104,11 @@ Mast.registerTree("TrackList", {
       var track = this.collection.get(id);
       track.set(attributes);
       this.collection.sort();
+      // app.playlist.tracks.sort(function(t1, t2) {
+      //   t1 = app.tracklist.collection.getOne('trackUri', t1.data.uri);
+      //   t2 = app.tracklist.collection.getOne('trackUri', t2.data.uri);
+      //   return t2.get('votes') - t1.get('votes');
+      // })
       this.render();
     }
   },
