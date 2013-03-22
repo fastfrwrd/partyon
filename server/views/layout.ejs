@@ -18,6 +18,7 @@
 			<%- body %>
 		</section>
 
+		<script type="text/javascript">Mast.raise({ baseurl : "<%- global.sails.config.baseurl %>" });</script>
 		<!-- Templates from your view path are included here -->
 		<%- assets.templateLibrary() %>
 	</body>

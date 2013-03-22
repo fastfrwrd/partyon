@@ -68,7 +68,14 @@ Mast.registerCollection('Tracks', {
 });
 
 Mast.registerComponent('TrackListItem', {
-  template: '.party-track'
+  template: '.party-track',
+  render: function() {
+    this.__super__.render.call(this);
+    // append image without making Spotify and Sockets poop themselves
+    var imgUrl =  Mast.Socket.baseurl + "user/" + this.$('.user').attr('data-user-id') + ".png";
+    this.$('.user').append($('<img />').attr('src', imgUrl));
+    return this;
+  }
 });
 
 Mast.registerTree("TrackList", {
@@ -137,7 +144,7 @@ Mast.registerComponent('Party', {
      this.$user_count = this.$('.user-count' );
     this.$track_count = this.$('.track-count');
     var $input = this.$('.title .uri input');
-    $input.val(Mast.Socket.baseurl + "/p/" + $input.val());
+    $input.val(Mast.Socket.baseurl + "p/" + $input.val());
   }
 });
 
@@ -178,13 +185,6 @@ models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
   }, function(){});
 });
 
-
-
-
 Mast.routes.index = function(query,page) {
     window.app = new Mast.components.App();
 };
-
-Mast.raise({
-  baseurl : "http://partyonwayne.local:1337"
-});

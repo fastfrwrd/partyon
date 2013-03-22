@@ -2,6 +2,7 @@ module.exports = {
 
 	// Name of the application (used as default <title>)
 	appName: "Party On! By Tucker Bickler and Paul Marbach",
+	baseurl: "http://partyonwayne.local:1337/",
 	// The environment the app is deployed in 
 	// (`development` or `production`)
 	//
