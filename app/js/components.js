@@ -69,12 +69,10 @@ Mast.registerCollection('Tracks', {
 
 Mast.registerComponent('TrackListItem', {
   template: '.party-track',
-  render: function() {
-    this.__super__.render.call(this);
+  afterRender: function() {
     // append image without making Spotify and Sockets poop themselves
     var imgUrl =  Mast.Socket.baseurl + "user/" + this.$('.user').attr('data-user-id') + ".png";
-    this.$('.user').append($('<img />').attr('src', imgUrl));
-    return this;
+    this.$('.user').append($('<img />', { 'src', imgUrl }));
   }
 });
 
@@ -158,6 +156,8 @@ Mast.registerComponent('App', {
     _.bindAll(this, 'startParty')
   },
   afterConnect: function() {
+    if (this.connected) return;
+    this.connected = true;
     this.child('.loading-container').close();
     this.renderRegion('New', '.new-container');
   },
