@@ -3,7 +3,18 @@ var request = require('request'),
     config = global.sails.config;
 
 
-var upvoteTrack = function(req, track, cb) {
+var trackExists = module.exports.trackExists = function(trackUri, partyId, cb) {
+
+    Track.find({
+        trackUri : trackUri,
+        partyId : partyId
+    }).done(function(err, track) {
+        cb(track);
+    });
+}
+
+
+var upvoteTrack = module.exports.upvoteTrack = function(req, track, cb) {
 
     Track.update(track.id, {
         votes: track.votes + 1
@@ -19,22 +30,33 @@ var upvoteTrack = function(req, track, cb) {
         cb && cb();
     })
 }
-module.exports.upvoteTrack = upvoteTrack;
 
 
-var trackExists = function(trackUri, partyId, cb) {
+var createTrack = module.exports.createTrack = function(req, t, cb) {
 
-    Track.find({
-        trackUri : trackUri,
-        partyId : partyId
-    }).done(function(err, track) {
-        cb(track);
+    // give it some required values because default values are not supported yet
+    t = _.defaults(t, {
+        userId: 'g',
+        votes: 0,
+        played: false
     });
+
+    Track.create(t).done(function(err, model) {
+
+        // publish it to rooms
+        Track.subscribe(req, model);
+        Track.publish(req, null, {
+            uri: Track.identity + '/create',
+            data: model.values,
+        });
+
+        // let 'em know we're done
+        cb && cb();
+    })
 }
-module.exports.trackExists = trackExists;
 
 
-var createTracks = function(req, tracks, delay, include_duplicates, idx) {
+var createTracks = module.exports.createTracks = function(req, tracks, delay, include_duplicates, idx) {
 
     // defaults
     delay === undefined && (delay = 0);
@@ -54,28 +76,11 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
         // publish a new track
         if (err || !track) {
 
-            // give it some required values because default values are not supported yet
-            t = _.extend(t, {
-                userId: 'g',
-                votes: 0,
-                played: false
-            });
-
             // create the track in the db
-            Track.create(t).done(function(err, model) {
-
-                // publish it to rooms
-                Track.subscribe(req, model);
-                Track.publish(req, null, {
-                    uri: Track.identity + '/create',
-                    data: model.values,
-                });
-
-                // send off to find another track
+            createTrack(req, t, function() {
                 setTimeout(function() {
                     createTracks(req, tracks, delay, include_duplicates, idx);
-                }, delay);
-
+                }, delay)
             })
 
         // otherwise vote up if include_duplicates
@@ -85,6 +90,8 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
                     createTracks(req, tracks, delay, include_duplicates, idx);
                 }, delay);
             });
+
+        // or....don't vote up!
         } else {
             setTimeout(function() {
                 createTracks(req, tracks, delay, include_duplicates, idx);
@@ -92,13 +99,11 @@ var createTracks = function(req, tracks, delay, include_duplicates, idx) {
         }
     })
 }
-module.exports.createTracks = createTracks;
 
-// !! not sure if we need this anymore
-//
+
 // we lookup one by one like this so we aren't bombarding servers
 //   with multiple requests at the same time.
-var doLookups = function(links, cb, idx, res) {
+var lookupMany = module.exports.lookupMany = function(links, cb, idx, res) {
 
     // defaults
     idx === undefined && (idx = 0);
@@ -108,16 +113,32 @@ var doLookups = function(links, cb, idx, res) {
     if (idx >= links.length) return cb(res);
 
     // lookup track with spotify
-    request({
-        url: 'http://ws.spotify.com/lookup/1/.json?uri=' + links[idx],
-        json: true
-    }, function(err,response,body) {
+    lookup(links[idx], function(err, response, body) {
 
         // store the metadata
         res.push(body);
 
         // recurse
-        doLookups(links, cb, idx + 1, res);
-    });
+        lookupMany(links, cb, idx + 1, res);
+    })
+};
+
+
+// Spotify Lookup
+// https://developer.spotify.com/technologies/web-api/lookup/
+var lookup = module.exports.lookup = function(uri, cb, json) {
+    request({
+        url: 'http://ws.spotify.com/lookup/1/.json?uri=' + uri,
+        json: json === undefined ? true : json
+    }, cb);
 }
-module.exports.doLookups = doLookups;
+
+
+// Spotify Search
+// https://developer.spotify.com/technologies/web-api/search/
+var search = module.exports.search = function(type, q, cb, json) {
+    request({
+        url: 'http://ws.spotify.com/search/1/'+type+'.json?q='+q,
+        json: json === undefined ? true : json
+    }, cb);
+}

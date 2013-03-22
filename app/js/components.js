@@ -128,7 +128,7 @@ Mast.registerComponent('Party', {
   bindings: {
     // You need bindings to each changed attribute or else Mast will
     // re-render the entire component. re: updatedAt
-      'updatedAt' : function() {},
+      'updatedAt' : function(){},
            'name' : function(newValue) { this.$name.text(newValue) },
      'user_count' : function(newValue) { this.$user_count.text(newValue) }
   },
@@ -171,30 +171,11 @@ Mast.registerComponent('App', {
 
 models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
 
-  var next_link = function(links, idx) {
-    if (idx >= links.length) return;
-    var href = links[idx];
-    models.Track.fromURI(href, function(track) {
-      track = track.data;
-      if (track.availableForPlayback) {
-        Mast.Socket.request('/track/create', {
-            trackUri : track.uri,
-            title : track.name,
-            artist : _.pluck(track.artists, 'name').join(', '),
-            partyId : app.party.get('id'),
-            votes : 1,
-            played: false,
-            userId : 'w'
-        }, function(){}, 'PUT')
-      }
-      setTimeout(function() {
-        idx += 1;
-        next_link(links, idx);  
-      }, 1000);
-    })
-  }
-
-  next_link(spotify.links, 0);
+  Mast.Socket.request('/track/createMany', {
+    userId: 'w',
+    partyId: app.party.get('id'),
+    links: spotify.links
+  }, function(){});
 });
 
 

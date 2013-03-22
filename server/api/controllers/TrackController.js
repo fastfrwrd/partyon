@@ -9,7 +9,7 @@ var request = require('request'),
 var TrackController = {
 
 	// To trigger this action locally, visit: `http://localhost:port/track/create`
-	create: function (req,res,next) {
+	create: function (req, res, next) {
 		var trackUri = req.param('trackUri'),
 			partyId = req.param('partyId');
 
@@ -22,33 +22,31 @@ var TrackController = {
 		})
 	},
 
-	suggest: function(req,res,next) {
-		var pageData = "";
-		request({
-			url: 'http://ws.spotify.com/search/1/track.json?q=' + req.param('q'),
-		}, function(err,response,body) {
-			res.send(body, response.statusCode);
-		});
-	},
+	createMany: function(req, res, next) {
+		var userId = req.param('userId'),
+			partyId = req.param('partyId'),
+			links = req.param('links');
 
-	lookup: function(req,res,next) {
-		var links = req.param('spotify'),
-			partyId = req.param('partyId');
-
-		util.doLookups(links, function(tracks) {
+		util.lookupMany(links, function(tracks) {
 
 			tracks = _.map(tracks, function(track) {
 				return {
 					trackUri: track.track.href,
-					partyId: partyId,
 					artist: _.pluck(track.track.artists, 'name').join(', '),
-					title: track.track.name
+					title: track.track.name,
+					partyId: partyId,
+					userId: userId
 				}
 			})
 
 			util.createTracks(req, tracks, 1000);
-
 		})
+	},
+
+	suggest: function(req, res) {
+		util.search('track', req.param('q'), function(err, response, body) {
+			res.send(body, response.statusCode);
+		}, false);
 	}
 
 };
