@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <script data-main="js/main" src="js/libs/require/require.js"></script>
 </head>
 <body>
 
@@ -88,20 +90,5 @@
 			</ul>
 		</article>-->
 	</div>
-
-	<!-- Scripts -->
-	<script type="text/javascript" src="js/mast.dev.js"></script>
-	<script type="text/javascript" src="js/jquery.mask.js"></script>
-	<script type="text/javascript" src="js/bootstrap.js"></script>
-	<script type="text/javascript" src="js/util.js"></script>
-	<script type="text/javascript" src="js/components.js"></script>
-	<script type="text/javascript">
-		// CHANGE ME BASED ON ENVIRONMENT
-		var url = "http://partyonwayne.local:1337/";
-		// HTTP request to get cookiezzzzz
-		$.get(url, function() {});
-		// now we can talk to socket
-		Mast.raise({ baseurl: url });
-	</script>
 </body>
 </html>
