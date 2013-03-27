@@ -22,9 +22,7 @@ require([
         self.collection.add(track);
         app.playlist.load('tracks').done(function(playlist) {
           playlist.tracks.add(models.Track.fromURI(track.trackUri)).done(function() {
-            if(self.collection.size() === 1) {
-              self.startPlaying(track);
-            }
+            if(self.collection.size() === 1) self.startPlaying(track);
           });
         });
       },
@@ -32,11 +30,17 @@ require([
         var track = this.collection.get(id);
         track.set(attributes);
         this.collection.sort(); // shouldn't have to call this. re-renders tree.
-        // app.playlist.tracks.sort(function(t1, t2) {
-        //   t1 = app.tracklist.collection.getOne('trackUri', t1.data.uri);
-        //   t2 = app.tracklist.collection.getOne('trackUri', t2.data.uri);
-        //   return t2.get('votes') - t1.get('votes');
-        // })
+
+        app.playlist.load('tracks').done(function(playlist) {
+          // start with the subset of the tracks that skips everything played up until and including now
+          // sort this part of the playlist
+          /* playlist.tracks.sort(function(t1, t2) {
+            t1 = app.tracklist.collection.getOne('trackUri', t1.data.uri);
+            t2 = app.tracklist.collection.getOne('trackUri', t2.data.uri);
+            return t2.get('votes') - t1.get('votes');
+          }); */
+        });
+
         this.render();
       }
     },
