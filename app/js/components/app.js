@@ -1,16 +1,9 @@
-define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'mast',
-    'components/party',
-    'components/new',
-    'components/loading'
-], function($, _, Backbone, Mast) {
-    var sp = getSpotifyApi(),
-        views = sp.require('$api/views'),
-        models = sp.require('$api/models');
-
+require([
+    '$api/models',
+    'js/components/party',
+    'js/components/new',
+    'js/components/loading'
+], function(models, Party, New, Loading) {
     Mast.registerComponent('App', {
       outlet: '#app',
       template: '.panes',
@@ -36,18 +29,22 @@ define([
         this.child('.new-container').close();
         this.renderRegion('Party', '.party-container', attrs);
         app.party = app.child('.party-container');
-        app.player = new views.Player();
-        app.playlist = new models.Playlist();
+        models.Playlist.createTemporary("partyon-current").done(function(p) {
+          app.playlist = p;
+          app.playlist.addEventListener('change', function(ev) {
+            console.log(ev);
+          });
+        });
       }
     });
 
-    models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
+    /*models.application.observe(models.EVENT.LINKSCHANGED, function(spotify) {
       Mast.Socket.request('/track/createMany', {
         userId: 'w',
         partyId: app.party.get('id'),
         links: spotify.links
       }, $.noop);
-    });
+    });*/
 
     Mast.routes.index = function(query,page) {
       window.app = new Mast.components.App();

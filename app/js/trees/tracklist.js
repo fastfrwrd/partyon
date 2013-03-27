@@ -1,11 +1,8 @@
-define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'mast',
-    'components/tracklistitem',
-    'collections/tracks'
-], function($, _, Backbone, Mast) {
+require([
+    '$api/models',
+    'js/components/tracklistitem',
+    'js/collections/tracks'
+], function(models, Tracklistitem, Tracks) {
   Mast.registerTree("TrackList", {
     template : '.empty',
     collection : "Tracks",
@@ -21,9 +18,15 @@ define([
     subscriptions: {
       '~track/create': function (track) {
         if (track.partyId != this.partyId) return;
-        this.collection.add(track);
-        app.playlist.add(track.trackUri);
-        this.startPlaying(track);
+        var self = this;
+        self.collection.add(track);
+        app.playlist.load('tracks').done(function(playlist) {
+          playlist.tracks.add(models.Track.fromURI(track.trackUri)).done(function() {
+            if(self.collection.size() === 1) {
+              self.startPlaying(track);
+            }
+          });
+        });
       },
       '~track/:id/update': function (id, attributes) {
         var track = this.collection.get(id);
@@ -38,13 +41,8 @@ define([
       }
     },
     startPlaying : function(track) {
-      if(this.collection.size() === 1 && this.collection.first().get('trackUri') !== track.uri) {
-        app.player.play(this.collection.first().get('trackUri'), app.playlist);
-        app.playlist.addEventListener('change', function(ev) {
-          console.log(ev);
-          // handle showing a "resume" button
-        });
-      }
+      console.log('play', track);
+      models.player.playContext(app.playlist);
     }
   });
 });

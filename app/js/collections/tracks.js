@@ -1,10 +1,6 @@
-define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'mast',
-    'models/track'
-], function($, _, Backbone, Mast) {
+require([
+    'js/models/track'
+], function(Track) {
   Mast.registerCollection('Tracks', {
     url : '/track',
     model : 'Track',

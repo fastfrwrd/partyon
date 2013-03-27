@@ -1,5 +1,3 @@
-define(['mast'], function(Mast) { 
-    Mast.registerModel('Track', {
-        urlRoot: '/track'
-    });
+Mast.registerModel('Track', {
+    urlRoot: '/track'
 });

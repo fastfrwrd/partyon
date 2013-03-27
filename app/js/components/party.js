@@ -1,11 +1,7 @@
-define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'mast',
-    'trees/tracklist',
-    'models/party'
-], function($, _, Backbone, Mast) {
+require([
+    'js/trees/tracklist',
+    'js/models/party'
+], function(Tracklist, Party) {
   Mast.registerComponent('Party', {
     template: '.party',
     model: 'Party',
